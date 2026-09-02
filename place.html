@@ -54,5 +54,19 @@
       }
     });
   </script>
-</body>
+<script>
+  function applyDark(on) {
+    document.documentElement.classList.toggle('dark', on);
+    var sun = document.getElementById('iconSun');
+    var moon = document.getElementById('iconMoon');
+    if (sun) sun.classList.toggle('hidden', !on);
+    if (moon) moon.classList.toggle('hidden', on);
+  }
+  function toggleDark() {
+    var isDark = !document.documentElement.classList.contains('dark');
+    localStorage.setItem('darkMode', isDark ? '1' : '0');
+    applyDark(isDark);
+  }
+  (function() { applyDark(localStorage.getItem('darkMode') === '1'); })();
+</script></body>
 </html>
