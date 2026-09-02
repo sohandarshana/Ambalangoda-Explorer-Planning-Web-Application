@@ -387,7 +387,7 @@ function initMap(places) {
       });
       
       marker.addListener('click', () => {
-        infoWindow.setContent(<b> + place.name + </b><br> + place.category_label);
+        infoWindow.setContent('<b>' + place.name + '</b><br>' + place.category_label);
         infoWindow.open(map, marker);
       });
       
