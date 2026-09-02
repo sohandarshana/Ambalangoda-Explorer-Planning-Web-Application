@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
+$requestedRole = $_POST['role'] ?? 'customer';
 
 if (empty($email) || empty($password)) {
     echo json_encode(["error" => "Email and password are required"]);
