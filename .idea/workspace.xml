@@ -2,38 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/09d90b8d-7781-4c23-8a84-8c9eebd92398.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/2e6c58e3-a67a-40cc-b4fa-e17a0f6e5d1c.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/34770e6e-3322-49ca-b96d-a7507707e2de.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/44db75d4-dd63-43c2-b39c-dd3f07738f4d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/47e342c7-da8e-4626-a1cd-c6b79dff9851.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/938e0210-31ff-40fe-b163-a40809386b41.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/94bb382f-125e-422c-9d47-ac474d7490cb.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/c24df3dc-a36d-473b-bd25-7de702394d7d.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/ca221767-574f-45e0-9e69-db56fe23c168.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/d3db3ce5-395d-4e50-822f-242a647e5432.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/d52e3142-70da-450f-a112-8c38f3edf074.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/e82c79b4-8b3c-4029-83c5-254bfbd49898.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HeroAnimation.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MapEmbed.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PlaceCard.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SiteFooter.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SiteHeader.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/contexts/TripContext.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/categories.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/places.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Admin.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Attractions.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Home.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/PlaceDetail.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/Planner.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/types/place.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/itinerary.ts" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/add_place.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attractions.html" beforeDir="false" afterPath="$PROJECT_DIR$/attractions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/planner.html" beforeDir="false" afterPath="$PROJECT_DIR$/planner.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,22 +18,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "NuwangiMahesha"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;NuwangiMahesha&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/NuwangiMahesha/9abc28df-b49f-4283-849e-38cee4e1f378.git",
-    "accountId": "fb550bcc-cfc2-4a70-8794-0c560eccb5a9"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/NuwangiMahesha/9abc28df-b49f-4283-849e-38cee4e1f378.git&quot;,
+    &quot;accountId&quot;: &quot;fb550bcc-cfc2-4a70-8794-0c560eccb5a9&quot;
   }
-}]]></component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 2,
-  "fromUser": false
-}]]></component>
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2,
+  &quot;fromUser&quot;: false
+}</component>
   <component name="ProjectId" id="3IlHAw67LpooSfCVdva39l12fwo" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -70,7 +45,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/User/Downloads/9abc28df-b49f-4283-849e-38cee4e1f378",
     "node.js.detected.package.eslint": "true",
