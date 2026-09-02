@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="crud operations create for the admin panel change 2">
-      <change beforePath="$PROJECT_DIR$/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/attractions.html" beforeDir="false" afterPath="$PROJECT_DIR$/attractions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/place.html" beforeDir="false" afterPath="$PROJECT_DIR$/place.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/planner.html" beforeDir="false" afterPath="$PROJECT_DIR$/planner.html" afterDir="false" />
+    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="dark mode changes 2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +43,18 @@
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/User/Downloads/9abc28df-b49f-4283-849e-38cee4e1f378",
     "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.jshint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.jshint": "",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\Downloads\9abc28df-b49f-4283-849e-38cee4e1f378\uploads" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -88,7 +91,9 @@
     <MESSAGE value="changes of admin panel" />
     <MESSAGE value="crud operations create for the admin panel" />
     <MESSAGE value="crud operations create for the admin panel change 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="crud operations create for the admin panel change 2" />
+    <MESSAGE value="dark mode changes" />
+    <MESSAGE value="dark mode changes 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="dark mode changes 2" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
