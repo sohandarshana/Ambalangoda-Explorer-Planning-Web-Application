@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -35,6 +35,13 @@
           <label class="block text-sm font-medium text-ink-700">Password</label>
           <input type="password" id="password" required class="mt-1 w-full rounded-md border border-sand-300 px-4 py-2 text-ink focus:border-ocean-500 focus:outline-none focus:ring-1 focus:ring-ocean-500">
         </div>
+        <div>
+          <label class="block text-sm font-medium text-ink-700">Login As</label>
+          <select id="role" class="mt-1 w-full rounded-md border border-sand-300 px-4 py-2 text-ink bg-white focus:border-ocean-500 focus:outline-none focus:ring-1 focus:ring-ocean-500">
+            <option value="customer">User</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
         <button type="submit" class="w-full rounded-md bg-ocean-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-ocean-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ocean-600">
           Sign In
         </button>
@@ -52,11 +59,13 @@
       e.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+      const role = document.getElementById('role').value;
       const errorMsg = document.getElementById('error-msg');
       
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
+      formData.append('role', role);
       
       try {
         const res = await fetch('api/auth_login.php', { method: 'POST', body: formData });

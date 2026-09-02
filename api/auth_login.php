@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once 'config.php';
 header('Content-Type: application/json');
 
@@ -20,6 +20,10 @@ $stmt->execute([$email]);
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password_hash'])) {
+    if ($user['role'] !== $requestedRole) {
+        echo json_encode(['error' => 'Account does not have ' . $requestedRole . ' privileges']);
+        exit;
+    }
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['role'] = $user['role'];
     $_SESSION['name'] = $user['name'];
@@ -28,3 +32,4 @@ if ($user && password_verify($password, $user['password_hash'])) {
     echo json_encode(["error" => "Invalid email or password"]);
 }
 ?>
+
