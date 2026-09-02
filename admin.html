@@ -12,39 +12,22 @@
   <style>
     body { font-family: 'Inter', sans-serif; }
     .field {
-      width: 100%; padding: .55rem .85rem; border-radius: .5rem;
+      width: 100%; padding: .5rem .8rem; border-radius: .5rem;
       border: 1.5px solid #E8DCC6; font-size: .875rem; color: #1B1A17;
       background: #FBF8F2; outline: none;
       transition: border-color .15s, background .15s;
     }
     .field:focus { border-color: #0E6E72; background: #fff; }
-    .lbl {
-      display: block; font-size: .7rem; font-weight: 600;
-      color: #6B655A; text-transform: uppercase;
-      letter-spacing: .05em; margin-bottom: .35rem;
-    }
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,.45);
-      z-index: 100; display: flex; align-items: center;
-      justify-content: center; padding: 1rem;
-    }
-    .modal-box {
-      background: #fff; border-radius: 1.25rem; width: 100%;
-      max-width: 680px; max-height: 90vh; overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0,0,0,.2);
-    }
-    .toast {
-      position: fixed; bottom: 1.5rem; right: 1.5rem;
-      padding: .75rem 1.25rem; border-radius: .75rem;
-      font-weight: 600; font-size: .875rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,.12);
-      z-index: 9999; transition: opacity .3s; opacity: 0; pointer-events: none;
-    }
+    .lbl { display: block; font-size: .68rem; font-weight: 600; color: #6B655A; text-transform: uppercase; letter-spacing: .05em; margin-bottom: .3rem; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-box { background: #fff; border-radius: 1.25rem; width: 100%; max-width: 700px; max-height: 92vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; padding: .75rem 1.25rem; border-radius: .75rem; font-weight: 600; font-size: .875rem; box-shadow: 0 4px 20px rgba(0,0,0,.12); z-index: 9999; transition: opacity .3s; opacity: 0; pointer-events: none; }
     .toast.show { opacity: 1; }
     .toast.ok  { background: #E8EDDC; color: #54683B; }
     .toast.err { background: #F8E2DD; color: #A83525; }
-    .img-thumb { width:100%; height:140px; object-fit:cover; border-radius:.5rem; display:none; margin-top:.5rem; }
-    .img-thumb.show { display:block; }
+    .img-thumb { width: 100%; height: 130px; object-fit: cover; border-radius: .5rem; display: none; margin-top: .4rem; }
+    .img-thumb.show { display: block; }
+    .form-collapsed { display: none; }
   </style>
 </head>
 <body class="bg-sand-50 text-ink min-h-screen flex flex-col">
@@ -58,18 +41,14 @@
     <div class="bg-ocean-600 px-6 py-4 rounded-t-2xl flex items-center justify-between">
       <div>
         <h2 class="font-display text-lg font-semibold text-white">Edit Place</h2>
-        <p class="text-ocean-100 text-xs mt-0.5">Changes are saved to the database and appear on the public website instantly.</p>
+        <p class="text-ocean-100 text-xs mt-0.5">Changes save to MySQL database and appear on the public website instantly.</p>
       </div>
       <button onclick="closeModal()" class="text-white/70 hover:text-white text-3xl leading-none">&times;</button>
     </div>
     <form id="editForm" class="p-6 grid grid-cols-2 gap-4">
       <input type="hidden" id="e_id">
-      <div class="col-span-2">
-        <label class="lbl">Place Name *</label>
-        <input type="text" id="e_name" required class="field">
-      </div>
-      <div>
-        <label class="lbl">Category *</label>
+      <div class="col-span-2"><label class="lbl">Place Name *</label><input type="text" id="e_name" required class="field"></div>
+      <div><label class="lbl">Category *</label>
         <select id="e_cat" required class="field">
           <option value="Cultural Attraction">Cultural Attraction</option>
           <option value="Religious Site">Religious Site</option>
@@ -80,48 +59,18 @@
           <option value="Restaurant">Restaurant</option>
         </select>
       </div>
-      <div>
-        <label class="lbl">Distance (km) *</label>
-        <input type="number" step="0.1" min="0" id="e_dist" required class="field">
-      </div>
-      <div>
-        <label class="lbl">Opening Hours</label>
-        <input type="text" id="e_hours" placeholder="Daily 8 AM - 5 PM" class="field">
-      </div>
-      <div>
-        <label class="lbl">Entry Fee</label>
-        <input type="text" id="e_fee" placeholder="Free / LKR 500" class="field">
-      </div>
-      <div>
-        <label class="lbl">Contact</label>
-        <input type="text" id="e_contact" placeholder="+94 91 225 8373" class="field">
-      </div>
-      <div>
-        <label class="lbl">Visit Duration (min)</label>
-        <input type="number" min="5" id="e_duration" class="field">
-      </div>
-      <div>
-        <label class="lbl">Best Time to Visit</label>
-        <input type="text" id="e_besttime" placeholder="Morning" class="field">
-      </div>
-      <div>
-        <label class="lbl">Latitude</label>
-        <input type="number" step="0.0001" id="e_lat" class="field">
-      </div>
-      <div>
-        <label class="lbl">Longitude</label>
-        <input type="number" step="0.0001" id="e_lng" class="field">
-      </div>
+      <div><label class="lbl">Distance (km) *</label><input type="number" step="0.1" min="0" id="e_dist" required class="field"></div>
+      <div><label class="lbl">Opening Hours</label><input type="text" id="e_hours" placeholder="Daily 8 AM - 5 PM" class="field"></div>
+      <div><label class="lbl">Entry Fee</label><input type="text" id="e_fee" placeholder="Free / LKR 500" class="field"></div>
+      <div><label class="lbl">Contact</label><input type="text" id="e_contact" placeholder="+94 91 225 8373" class="field"></div>
+      <div><label class="lbl">Visit Duration (min)</label><input type="number" min="5" id="e_duration" class="field"></div>
+      <div><label class="lbl">Best Time to Visit</label><input type="text" id="e_besttime" placeholder="Morning" class="field"></div>
+      <div><label class="lbl">Latitude</label><input type="number" step="0.0001" id="e_lat" class="field"></div>
+      <div><label class="lbl">Longitude</label><input type="number" step="0.0001" id="e_lng" class="field"></div>
+      <div class="col-span-2"><label class="lbl">Summary *</label><textarea id="e_summary" required rows="2" class="field resize-none"></textarea></div>
+      <div class="col-span-2"><label class="lbl">Full Description</label><textarea id="e_description" rows="3" class="field resize-none"></textarea></div>
       <div class="col-span-2">
-        <label class="lbl">Summary *</label>
-        <textarea id="e_summary" required rows="2" class="field resize-none"></textarea>
-      </div>
-      <div class="col-span-2">
-        <label class="lbl">Full Description</label>
-        <textarea id="e_description" rows="3" class="field resize-none"></textarea>
-      </div>
-      <div class="col-span-2">
-        <label class="lbl">Change Image (optional - leave blank to keep current)</label>
+        <label class="lbl">Change Image (leave blank to keep current)</label>
         <input type="file" id="e_imgfile" accept="image/*" class="field">
         <img id="e_imgPreview" class="img-thumb">
       </div>
@@ -142,125 +91,120 @@
       <span class="rounded-full bg-coral-100 px-2.5 py-0.5 text-xs font-bold text-coral-600 tracking-wide">ADMIN</span>
     </a>
     <div class="hidden items-center gap-1 md:flex">
-      <a href="index.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink transition-colors">Home</a>
-      <a href="attractions.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink transition-colors">Places</a>
-      <a href="planner.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink transition-colors">Day Planner</a>
+      <a href="index.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink">Home</a>
+      <a href="attractions.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink">Places</a>
+      <a href="planner.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink">Day Planner</a>
       <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium bg-coral-100 text-coral-600">Admin</a>
     </div>
   </nav>
 </header>
 
-<!-- MAIN -->
-<main class="flex-1 py-10 px-6">
-  <div class="mx-auto max-w-7xl">
-    <div class="mb-8">
-      <h1 class="font-display text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-      <p class="mt-1 text-ink-500">Full CRUD — create, read, update and delete attractions. All changes save directly to the MySQL database.</p>
+<main class="flex-1 py-8 px-6">
+  <div class="mx-auto max-w-7xl space-y-6">
+
+    <!-- Page heading -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h1 class="font-display text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <p class="mt-1 text-ink-500 text-sm">Full CRUD — all changes save directly to the MySQL database and appear live on the website.</p>
+      </div>
+      <button onclick="toggleForm()" id="formToggleBtn" class="inline-flex items-center gap-2 rounded-full bg-ocean-600 px-4 py-2 text-sm font-semibold text-white hover:bg-ocean-700 transition-colors">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        Add New Place
+      </button>
     </div>
 
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
-
-      <!-- ADD FORM -->
-      <div class="xl:col-span-1">
-        <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
-          <div class="bg-ocean-600 px-6 py-4">
-            <h2 class="font-display text-lg font-semibold text-white">Add New Place</h2>
-            <p class="text-ocean-100 text-xs mt-0.5">Saved to MySQL database and visible on the website immediately.</p>
+    <!-- ADD FORM (collapsible) -->
+    <div id="addFormWrap" class="form-collapsed">
+      <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
+        <div class="bg-ocean-600 px-6 py-3 flex items-center justify-between">
+          <div>
+            <h2 class="font-display text-base font-semibold text-white">Add New Place</h2>
+            <p class="text-ocean-100 text-xs">Saved to MySQL database — visible on the website immediately.</p>
           </div>
-          <form id="addForm" class="p-6 space-y-3">
-            <div>
-              <label class="lbl">Place Name *</label>
-              <input type="text" id="p_name" required placeholder="e.g. Ariyapala Mask Museum" class="field">
-            </div>
-            <div>
-              <label class="lbl">Category *</label>
-              <select id="p_cat" required class="field">
-                <option value="">Select category...</option>
-                <option value="Cultural Attraction">Cultural Attraction</option>
-                <option value="Religious Site">Religious Site</option>
-                <option value="Beach">Beach</option>
-                <option value="Heritage &amp; Nature">Heritage &amp; Nature</option>
-                <option value="Wildlife Attraction">Wildlife Attraction</option>
-                <option value="Cafe">Cafe</option>
-                <option value="Restaurant">Restaurant</option>
-              </select>
-            </div>
-            <div class="grid grid-cols-2 gap-3">
-              <div>
-                <label class="lbl">Distance (km) *</label>
-                <input type="number" step="0.1" min="0" id="p_dist" required placeholder="2.5" class="field">
-              </div>
-              <div>
-                <label class="lbl">Duration (min)</label>
-                <input type="number" min="5" id="p_duration" placeholder="60" class="field">
-              </div>
-            </div>
-            <div>
-              <label class="lbl">Opening Hours</label>
-              <input type="text" id="p_hours" placeholder="Daily 8:00 AM - 5:00 PM" class="field">
-            </div>
-            <div>
-              <label class="lbl">Entry Fee</label>
-              <input type="text" id="p_fee" placeholder="Free / LKR 500" class="field">
-            </div>
-            <div>
-              <label class="lbl">Contact</label>
-              <input type="text" id="p_contact" placeholder="+94 91 225 8373" class="field">
-            </div>
-            <div>
-              <label class="lbl">Short Summary *</label>
-              <textarea id="p_summary" required rows="2" placeholder="Brief description of the place..." class="field resize-none"></textarea>
-            </div>
-            <div>
-              <label class="lbl">Place Image (JPG / PNG)</label>
-              <input type="file" id="p_imgfile" accept="image/*" class="field">
-              <img id="p_imgPreview" class="img-thumb">
-            </div>
-            <div id="addMsg" class="hidden rounded-lg px-4 py-2.5 text-sm font-medium"></div>
-            <button type="submit" id="addBtn" class="w-full bg-ocean-600 text-white font-semibold py-2.5 rounded-lg hover:bg-ocean-700 transition-colors text-sm">
-              + Save to Database
-            </button>
-          </form>
+          <button onclick="toggleForm()" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
         </div>
-      </div>
-
-      <!-- PLACES TABLE -->
-      <div class="xl:col-span-2">
-        <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
-          <div class="px-6 py-4 border-b border-sand-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <h2 class="font-display text-lg font-semibold">Manage Places</h2>
-              <p class="text-ink-500 text-xs mt-0.5" id="placeCount">Loading from database...</p>
-            </div>
-            <input type="text" id="tableSearch" placeholder="Search name or category..." class="field sm:!w-56">
+        <form id="addForm" class="p-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div class="lg:col-span-2"><label class="lbl">Place Name *</label><input type="text" id="p_name" required placeholder="e.g. Ariyapala Mask Museum" class="field"></div>
+          <div><label class="lbl">Category *</label>
+            <select id="p_cat" required class="field">
+              <option value="">Select...</option>
+              <option value="Cultural Attraction">Cultural Attraction</option>
+              <option value="Religious Site">Religious Site</option>
+              <option value="Beach">Beach</option>
+              <option value="Heritage &amp; Nature">Heritage &amp; Nature</option>
+              <option value="Wildlife Attraction">Wildlife Attraction</option>
+              <option value="Cafe">Cafe</option>
+              <option value="Restaurant">Restaurant</option>
+            </select>
           </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-              <thead>
-                <tr class="bg-sand-50 border-b border-sand-200 text-xs text-ink-500 uppercase tracking-wide">
-                  <th class="px-4 py-3 text-left w-14">Image</th>
-                  <th class="px-4 py-3 text-left">Name</th>
-                  <th class="px-4 py-3 text-left">Category</th>
-                  <th class="px-4 py-3 text-left">Dist.</th>
-                  <th class="px-4 py-3 text-left">Hours</th>
-                  <th class="px-4 py-3 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="tbl" class="divide-y divide-sand-100">
-                <tr><td colspan="6" class="px-4 py-10 text-center text-ink-500">Loading...</td></tr>
-              </tbody>
-            </table>
+          <div><label class="lbl">Distance (km) *</label><input type="number" step="0.1" min="0" id="p_dist" required placeholder="2.5" class="field"></div>
+          <div><label class="lbl">Duration (min)</label><input type="number" min="5" id="p_duration" placeholder="60" class="field"></div>
+          <div><label class="lbl">Opening Hours</label><input type="text" id="p_hours" placeholder="Daily 8:00 AM - 5:00 PM" class="field"></div>
+          <div><label class="lbl">Entry Fee</label><input type="text" id="p_fee" placeholder="Free / LKR 500" class="field"></div>
+          <div><label class="lbl">Contact</label><input type="text" id="p_contact" placeholder="+94 91 225 8373" class="field"></div>
+          <div class="md:col-span-2"><label class="lbl">Short Summary *</label><textarea id="p_summary" required rows="1" placeholder="Brief description..." class="field resize-none"></textarea></div>
+          <div>
+            <label class="lbl">Image (JPG/PNG)</label>
+            <input type="file" id="p_imgfile" accept="image/*" class="field">
+            <img id="p_imgPreview" class="img-thumb">
           </div>
-        </div>
+          <div id="addMsg" class="lg:col-span-5 hidden rounded-lg px-4 py-2.5 text-sm font-medium"></div>
+          <div class="lg:col-span-5 flex justify-end gap-3">
+            <button type="button" onclick="toggleForm()" class="rounded-lg border border-sand-300 px-5 py-2 text-sm font-semibold text-ink-500 hover:bg-sand-100 transition-colors">Cancel</button>
+            <button type="submit" id="addBtn" class="rounded-lg bg-ocean-600 px-6 py-2 text-sm font-semibold text-white hover:bg-ocean-700 transition-colors">+ Save to Database</button>
+          </div>
+        </form>
       </div>
     </div>
+
+    <!-- PLACES TABLE — full width, all rows visible -->
+    <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
+      <div class="px-6 py-4 border-b border-sand-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="font-display text-lg font-semibold">Manage Places</h2>
+          <p class="text-ink-500 text-xs mt-0.5" id="placeCount">Loading from database...</p>
+        </div>
+        <input type="text" id="tableSearch" placeholder="Search name or category..." class="field sm:!w-64">
+      </div>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-sand-50 border-b border-sand-200 text-xs text-ink-500 uppercase tracking-wide">
+            <th class="px-4 py-3 text-left w-14">Image</th>
+            <th class="px-4 py-3 text-left">Name &amp; Summary</th>
+            <th class="px-4 py-3 text-left">Category</th>
+            <th class="px-4 py-3 text-left">Dist.</th>
+            <th class="px-4 py-3 text-left">Opening Hours</th>
+            <th class="px-4 py-3 text-left">Fee</th>
+            <th class="px-4 py-3 text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbl" class="divide-y divide-sand-100">
+          <tr><td colspan="7" class="px-4 py-12 text-center text-ink-500">Loading from database...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </main>
 
 <script>
   var places = [];
+  var formVisible = false;
 
-  // Toast
+  function toggleForm() {
+    formVisible = !formVisible;
+    var wrap = document.getElementById('addFormWrap');
+    var btn  = document.getElementById('formToggleBtn');
+    if (formVisible) {
+      wrap.classList.remove('form-collapsed');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/></svg> Hide Form';
+    } else {
+      wrap.classList.add('form-collapsed');
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg> Add New Place';
+    }
+  }
+
   function toast(msg, type) {
     var t = document.getElementById('toast');
     t.textContent = msg;
@@ -268,21 +212,21 @@
     setTimeout(function() { t.className = 'toast ' + (type || 'ok'); }, 3500);
   }
 
-  // Image preview
-  function previewImg(inputId, previewId) {
-    var inp = document.getElementById(inputId);
-    var prev = document.getElementById(previewId);
-    inp.addEventListener('change', function() {
+  function setupPreview(inputId, previewId) {
+    document.getElementById(inputId).addEventListener('change', function() {
       if (!this.files[0]) return;
       var r = new FileReader();
-      r.onload = function(e) { prev.src = e.target.result; prev.classList.add('show'); };
+      r.onload = function(e) {
+        var img = document.getElementById(previewId);
+        img.src = e.target.result;
+        img.classList.add('show');
+      };
       r.readAsDataURL(this.files[0]);
     });
   }
-  previewImg('p_imgfile', 'p_imgPreview');
-  previewImg('e_imgfile', 'e_imgPreview');
+  setupPreview('p_imgfile', 'p_imgPreview');
+  setupPreview('e_imgfile', 'e_imgPreview');
 
-  // Category badge colors
   var BADGE = {
     'Cultural Attraction': 'bg-ochre-100 text-ochre-600',
     'Religious Site': 'bg-ocean-100 text-ocean-700',
@@ -292,56 +236,61 @@
     'Cafe': 'bg-coral-100 text-coral-600',
     'Restaurant': 'bg-coral-100 text-coral-600'
   };
+
   function badge(label) {
     var cls = BADGE[label] || 'bg-sand-100 text-ink-500';
     return '<span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ' + cls + '">' + label + '</span>';
   }
 
-  // Render table
   function renderTable(data) {
     document.getElementById('placeCount').textContent = data.length + ' place' + (data.length !== 1 ? 's' : '') + ' in database';
     var tb = document.getElementById('tbl');
     if (!data.length) {
-      tb.innerHTML = '<tr><td colspan="6" class="px-4 py-10 text-center text-ink-500">No places found.</td></tr>';
+      tb.innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-ink-500">No places found.</td></tr>';
       return;
     }
     var rows = '';
     for (var i = 0; i < data.length; i++) {
       var p = data[i];
-      var imgSrc = p.imageUrl || '';
-      if (imgSrc.charAt(0) === '/') imgSrc = imgSrc.substring(1);
-      var imgHtml = imgSrc
+      var imgSrc = (p.imageUrl || '').replace(/^\//, '');
+      var imgCell = imgSrc
         ? '<img src="' + imgSrc + '" class="w-11 h-11 rounded-lg object-cover border border-sand-200">'
         : '<div class="w-11 h-11 rounded-lg bg-sand-100 flex items-center justify-center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9A9285" stroke-width="1.5"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>';
-      rows += '<tr class="hover:bg-sand-50 transition-colors group">'
-        + '<td class="px-4 py-3">' + imgHtml + '</td>'
-        + '<td class="px-4 py-3"><div class="font-semibold text-ink leading-tight">' + p.name + '</div>'
-        + '<div class="text-xs text-ink-500 mt-0.5 max-w-xs truncate">' + (p.summary ? p.summary.substring(0, 60) + (p.summary.length > 60 ? '...' : '') : '') + '</div></td>'
+      var safeName = p.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      rows += '<tr class="hover:bg-sand-50/70 transition-colors group">'
+        + '<td class="px-4 py-3">' + imgCell + '</td>'
+        + '<td class="px-4 py-3 max-w-xs">'
+        +   '<div class="font-semibold text-ink leading-tight">' + p.name + '</div>'
+        +   '<div class="text-xs text-ink-500 mt-0.5 truncate max-w-[240px]">' + (p.summary ? p.summary.substring(0,70) + (p.summary.length > 70 ? '...' : '') : '') + '</div>'
+        + '</td>'
         + '<td class="px-4 py-3">' + badge(p.category_label) + '</td>'
-        + '<td class="px-4 py-3 text-ink-500 tabular-nums">' + p.distanceKm + ' km</td>'
-        + '<td class="px-4 py-3 text-xs text-ink-500 max-w-[130px] truncate">' + (p.openingHours || '—') + '</td>'
-        + '<td class="px-4 py-3 text-right"><div class="flex justify-end gap-2 opacity-60 group-hover:opacity-100 transition-opacity">'
-        + '<button onclick="openEdit(\'' + p.id + '\')" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-ocean-700 bg-ocean-100 hover:bg-ocean-600 hover:text-white transition-colors">'
-        + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Edit</button>'
-        + '<button onclick="delPlace(\'' + p.id + '\',\'' + p.name.replace(/'/g, '\\x27') + '\')" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-coral-600 bg-coral-100 hover:bg-coral-600 hover:text-white transition-colors">'
-        + '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>Delete</button>'
-        + '</div></td>'
+        + '<td class="px-4 py-3 text-ink-500 tabular-nums whitespace-nowrap">' + p.distanceKm + ' km</td>'
+        + '<td class="px-4 py-3 text-xs text-ink-500 whitespace-nowrap">' + (p.openingHours || '—') + '</td>'
+        + '<td class="px-4 py-3 text-xs text-ink-500 whitespace-nowrap">' + (p.entryFee || '—') + '</td>'
+        + '<td class="px-4 py-3 text-right">'
+        +   '<div class="inline-flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity">'
+        +     '<button onclick="openEdit(\'' + p.id + '\')" title="Edit" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-ocean-700 bg-ocean-100 hover:bg-ocean-600 hover:text-white transition-colors">'
+        +       '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>Edit'
+        +     '</button>'
+        +     '<button onclick="delPlace(\'' + p.id + '\',\'' + safeName + '\')" title="Delete" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-coral-600 bg-coral-100 hover:bg-coral-600 hover:text-white transition-colors">'
+        +       '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>Delete'
+        +     '</button>'
+        +   '</div>'
+        + '</td>'
         + '</tr>';
     }
     tb.innerHTML = rows;
   }
 
-  // Load all places from database
   function loadPlaces() {
     fetch('api/get_places.php')
       .then(function(r) { return r.json(); })
       .then(function(data) { places = data; renderTable(places); })
       .catch(function() {
-        document.getElementById('tbl').innerHTML = '<tr><td colspan="6" class="px-4 py-10 text-center text-coral-600 font-medium">Failed to connect to database. Is XAMPP running?</td></tr>';
+        document.getElementById('tbl').innerHTML = '<tr><td colspan="7" class="px-4 py-12 text-center text-coral-600 font-medium">Failed to connect to database. Is XAMPP running?</td></tr>';
       });
   }
 
-  // Search filter
   document.getElementById('tableSearch').addEventListener('input', function() {
     var q = this.value.toLowerCase();
     renderTable(places.filter(function(p) {
@@ -349,10 +298,9 @@
     }));
   });
 
-  // Upload image helper
-  function uploadImg(fileInputId, callback) {
-    var inp = document.getElementById(fileInputId);
-    if (!inp.files[0]) { callback(null); return; }
+  function uploadImg(inputId, callback) {
+    var inp = document.getElementById(inputId);
+    if (!inp || !inp.files[0]) { callback(null); return; }
     var fd = new FormData();
     fd.append('image', inp.files[0]);
     fetch('api/upload_image.php', { method: 'POST', body: fd })
@@ -361,13 +309,12 @@
       .catch(function() { callback(null); });
   }
 
-  // CREATE — Add place
+  // CREATE
   document.getElementById('addForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var btn = document.getElementById('addBtn');
     var msg = document.getElementById('addMsg');
-    btn.disabled = true;
-    btn.textContent = 'Saving to database...';
+    btn.disabled = true; btn.textContent = 'Saving...';
     var name = document.getElementById('p_name').value.trim();
     uploadImg('p_imgfile', function(imgUrl) {
       var payload = {
@@ -384,38 +331,29 @@
         imageUrl: imgUrl || 'e82c79b4-8b3c-4029-83c5-254bfbd49898.jpg',
         lat: 6.2306, lng: 80.0555, bestTime: ''
       };
-      fetch('api/add_place.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d.success) {
-          toast('"' + name + '" saved to database!', 'ok');
-          document.getElementById('addForm').reset();
-          document.getElementById('p_imgPreview').classList.remove('show');
-          loadPlaces();
-          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-moss-100 text-moss-600';
-          msg.textContent = '"' + name + '" added and is now live on the public website!';
-        } else {
-          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
-          msg.textContent = 'Database error: ' + (d.error || 'Place ID may already exist.');
-        }
-        msg.classList.remove('hidden');
-        setTimeout(function() { msg.classList.add('hidden'); }, 5000);
-        btn.disabled = false;
-        btn.textContent = '+ Save to Database';
-      })
-      .catch(function(err) {
-        toast('Connection error: ' + err.message, 'err');
-        btn.disabled = false;
-        btn.textContent = '+ Save to Database';
-      });
+      fetch('api/add_place.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success) {
+            toast('"' + name + '" saved to database!', 'ok');
+            document.getElementById('addForm').reset();
+            document.getElementById('p_imgPreview').classList.remove('show');
+            loadPlaces(); toggleForm();
+            msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-moss-100 text-moss-600';
+            msg.textContent = '"' + name + '" added and is now live on the public website!';
+          } else {
+            msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
+            msg.textContent = 'Database error: ' + (d.error || 'Place ID may already exist.');
+          }
+          msg.classList.remove('hidden');
+          setTimeout(function() { msg.classList.add('hidden'); }, 5000);
+          btn.disabled = false; btn.textContent = '+ Save to Database';
+        })
+        .catch(function(err) { toast('Connection error: ' + err.message, 'err'); btn.disabled = false; btn.textContent = '+ Save to Database'; });
     });
   });
 
-  // READ — Open edit modal (pre-fill from in-memory data)
+  // READ (open edit modal)
   function openEdit(id) {
     var p = null;
     for (var i = 0; i < places.length; i++) { if (places[i].id === id) { p = places[i]; break; } }
@@ -434,29 +372,22 @@
     document.getElementById('e_summary').value = p.summary || '';
     document.getElementById('e_description').value = p.description || '';
     var prev = document.getElementById('e_imgPreview');
-    if (p.imageUrl) {
-      var src = p.imageUrl.charAt(0) === '/' ? p.imageUrl.substring(1) : p.imageUrl;
-      prev.src = src; prev.classList.add('show');
-    } else { prev.classList.remove('show'); }
+    if (p.imageUrl) { prev.src = p.imageUrl.replace(/^\//, ''); prev.classList.add('show'); } else { prev.classList.remove('show'); }
     document.getElementById('e_imgfile').value = '';
     document.getElementById('editMsg').classList.add('hidden');
     document.getElementById('editModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
   }
 
-  function closeModal() {
-    document.getElementById('editModal').classList.add('hidden');
-    document.body.style.overflow = '';
-  }
+  function closeModal() { document.getElementById('editModal').classList.add('hidden'); document.body.style.overflow = ''; }
   document.getElementById('editModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-  // UPDATE — Save edits to database
+  // UPDATE
   document.getElementById('editForm').addEventListener('submit', function(e) {
     e.preventDefault();
     var btn = document.getElementById('editSaveBtn');
     var msg = document.getElementById('editMsg');
-    btn.disabled = true;
-    btn.textContent = 'Saving to database...';
+    btn.disabled = true; btn.textContent = 'Saving...';
     var origId = document.getElementById('e_id').value;
     var orig = null;
     for (var i = 0; i < places.length; i++) { if (places[i].id === origId) { orig = places[i]; break; } }
@@ -477,47 +408,31 @@
         description: document.getElementById('e_description').value,
         imageUrl: newImg || (orig ? orig.imageUrl : '')
       };
-      fetch('api/update_place.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d.success) {
-          toast('"' + payload.name + '" updated in database!', 'ok');
-          closeModal();
-          loadPlaces();
-        } else {
-          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
-          msg.textContent = 'Database error: ' + (d.error || 'Could not save changes.');
-          msg.classList.remove('hidden');
-        }
-        btn.disabled = false;
-        btn.textContent = 'Save to Database';
-      })
-      .catch(function(err) {
-        toast('Connection error: ' + err.message, 'err');
-        btn.disabled = false;
-        btn.textContent = 'Save to Database';
-      });
+      fetch('api/update_place.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (d.success) { toast('"' + payload.name + '" updated in database!', 'ok'); closeModal(); loadPlaces(); }
+          else {
+            msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
+            msg.textContent = 'Database error: ' + (d.error || 'Could not save changes.');
+            msg.classList.remove('hidden');
+          }
+          btn.disabled = false; btn.textContent = 'Save to Database';
+        })
+        .catch(function(err) { toast('Connection error: ' + err.message, 'err'); btn.disabled = false; btn.textContent = 'Save to Database'; });
     });
   });
 
-  // DELETE — Remove from database
+  // DELETE
   function delPlace(id, name) {
     if (!confirm('Delete "' + name + '"?\n\nThis permanently removes it from the database and public website.')) return;
-    fetch('api/delete_place.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: id })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(d) {
-      if (d.success) { toast('"' + name + '" deleted from database.', 'ok'); loadPlaces(); }
-      else { toast('Failed: ' + (d.error || 'Unknown error'), 'err'); }
-    })
-    .catch(function() { toast('Connection error.', 'err'); });
+    fetch('api/delete_place.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id }) })
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.success) { toast('"' + name + '" deleted from database.', 'ok'); loadPlaces(); }
+        else { toast('Failed: ' + (d.error || 'Unknown error'), 'err'); }
+      })
+      .catch(function() { toast('Connection error.', 'err'); });
   }
 
   document.addEventListener('DOMContentLoaded', loadPlaces);

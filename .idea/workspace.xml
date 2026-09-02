@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="crud operations create for the admin panel">
-      <change afterPath="$PROJECT_DIR$/api/upload_image.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/update_place.php" beforeDir="false" afterPath="$PROJECT_DIR$/api/update_place.php" afterDir="false" />
-    </list>
+    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="crud operations create for the admin panel change 2" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -86,7 +81,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="changes of admin panel" />
     <MESSAGE value="crud operations create for the admin panel" />
-    <option name="LAST_COMMIT_MESSAGE" value="crud operations create for the admin panel" />
+    <MESSAGE value="crud operations create for the admin panel change 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="crud operations create for the admin panel change 2" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
