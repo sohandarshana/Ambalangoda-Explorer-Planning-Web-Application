@@ -29,3 +29,4 @@ if (move_uploaded_file($_FILES["image"]["tmp_name"], $dest)) {
     echo json_encode(["success" => false, "error" => "Failed to save file"]);
 }
 ?>
+

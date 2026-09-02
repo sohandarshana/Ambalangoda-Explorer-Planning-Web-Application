@@ -361,3 +361,46 @@ window.focusMap = function(lat, lng) {
     map.setView([parseFloat(lat), parseFloat(lng)], 16);
   }
 }
+
+// --- Authentication & Navigation ---
+document.addEventListener('DOMContentLoaded', async () => {
+  const navContainer = document.querySelector('nav > div.hidden');
+  if (!navContainer) return;
+
+  try {
+    const res = await fetch('api/auth_check.php');
+    const data = await res.json();
+    
+    // Find where the dark mode toggle is, so we can insert BEFORE it
+    const darkToggle = document.getElementById('darkToggle');
+    
+    let authHtml = '';
+    if (data.loggedIn) {
+      if (data.role === 'admin') {
+        authHtml += <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-coral-600 hover:text-coral-800">Admin</a>;
+      }
+      authHtml += <div class="ml-2 flex items-center gap-2 rounded-full border border-sand-200 px-3 py-1.5"><span class="text-sm font-medium text-ink-700"> + data.name + </span><button onclick="logout()" class="text-xs text-ink-500 hover:text-ink">Logout</button></div>;
+    } else {
+      authHtml += <a href="login.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-ink-500 hover:text-ink">Login</a>;
+      authHtml += <a href="register.html" class="rounded-full bg-ocean-600 px-3.5 py-2 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:bg-ocean-500">Register</a>;
+    }
+    
+    // If it's the index, attractions, or planner page, remove static Admin link if it exists
+    const adminLink = Array.from(navContainer.querySelectorAll('a')).find(a => a.textContent === 'Admin');
+    if (adminLink) adminLink.remove();
+    
+    if (darkToggle) {
+      darkToggle.insertAdjacentHTML('beforebegin', authHtml);
+    } else {
+      navContainer.insertAdjacentHTML('beforeend', authHtml);
+    }
+    
+  } catch(err) {
+    console.error("Auth check failed", err);
+  }
+});
+
+window.logout = async function() {
+  await fetch('api/auth_logout.php');
+  window.location.href = 'index.html';
+}

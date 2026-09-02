@@ -1,4 +1,5 @@
 <?php
+session_start();
 // api/config.php
 
 $host = '127.0.0.1';
@@ -22,3 +23,4 @@ try {
     exit;
 }
 ?>
+

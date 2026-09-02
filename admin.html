@@ -30,6 +30,19 @@
     .img-thumb.show { display: block; }
     .form-collapsed { display: none; }
   </style>
+  <script>
+    // Enforce Admin Access
+    fetch('api/auth_check.php')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.loggedIn || data.role !== 'admin') {
+          window.location.href = 'login.html';
+        }
+      })
+      .catch(err => {
+        window.location.href = 'login.html';
+      });
+  </script>
 </head>
 <body class="bg-sand-50 text-ink min-h-screen flex flex-col">
 
@@ -458,3 +471,4 @@
   (function() { applyDark(localStorage.getItem('darkMode') === '1'); })();
 </script></body>
 </html>
+
