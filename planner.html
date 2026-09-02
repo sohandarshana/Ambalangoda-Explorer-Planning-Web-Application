@@ -4,13 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Day Planner - Ambalangoda Tourist Day Planner</title>
-  
-  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dark.css">
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE&callback=initMapGoogle"></script>
 </head>
 <body class="bg-sand-50 text-ink min-h-screen flex flex-col">
   
@@ -74,7 +73,16 @@
     
     // Update map layer if map exists
     if (typeof map !== 'undefined' && map !== null) {
-      if (typeof google !== 'undefined') { map.setOptions({ styles: on ? [{ elementType: 'geometry', stylers: [{ color: '#242f3e' }]},{ elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }]},{ elementType: 'labels.text.fill', stylers: [{ color: '#746855' }]},{ featureType: 'administrative.locality', elementType: 'labels.text.fill', stylers: [{ color: '#d59563' }]},{ featureType: 'road', elementType: 'geometry', stylers: [{ color: '#38414e' }]},{ featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#212a37' }]},{ featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#9ca5b3' }]},{ featureType: 'water', elementType: 'geometry', stylers: [{ color: '#17263c' }]},{ featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#515c6d' }]},{ featureType: 'water', elementType: 'labels.text.stroke', stylers: [{ color: '#17263c' }]}] : [] }); }
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer) {
+          map.removeLayer(layer);
+        }
+      });
+      L.tileLayer(on ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
     }
   }
   function toggleDark() {
@@ -85,7 +93,5 @@
   (function() { applyDark(localStorage.getItem('darkMode') === '1'); })();
 </script></body>
 </html>
-
-
 
 
