@@ -75,16 +75,32 @@ function renderCategories(categories, allPlaces) {
   window.allPlacesData = allPlaces;
 }
 
+window.currentCategory = 'all';
+
 window.filterPlaces = function(categoryId) {
   if (!window.allPlacesData) return;
-  
-  if (categoryId === 'all') {
-    renderPlaces(window.allPlacesData);
-  } else {
-    const filtered = window.allPlacesData.filter(p => p.category_id === categoryId);
-    renderPlaces(filtered);
-  }
+  window.currentCategory = categoryId;
+  applyFilters();
 }
+
+function applyFilters() {
+  if (!window.allPlacesData) return;
+  const searchTerm = document.getElementById('searchInput') ? document.getElementById('searchInput').value.toLowerCase() : '';
+  
+  const filtered = window.allPlacesData.filter(p => {
+    const matchCategory = window.currentCategory === 'all' || p.category_id === window.currentCategory;
+    const matchSearch = p.name.toLowerCase().includes(searchTerm) || p.summary.toLowerCase().includes(searchTerm);
+    return matchCategory && matchSearch;
+  });
+  renderPlaces(filtered);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) {
+    searchInput.addEventListener('input', applyFilters);
+  }
+});
 
 function renderPlaces(places) {
   const container = document.getElementById('places-container');
@@ -98,10 +114,11 @@ function renderPlaces(places) {
   let html = '';
   places.forEach(place => {
     const inTrip = isPlaceInItinerary(place.id);
+    const imgSrc = place.imageUrl.startsWith('/') ? place.imageUrl.substring(1) : place.imageUrl;
     html += `
       <a href="place.html?id=${place.id}" class="group relative flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-sand-200 transition-all hover:shadow-md hover:ring-sand-300">
         <div class="relative aspect-[4/3] w-full overflow-hidden bg-sand-100">
-          <img src="${place.imageUrl}" alt="${place.name}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <img src="${imgSrc}" alt="${place.name}" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-ink/60 to-transparent"></div>
           <div class="absolute bottom-4 left-4 right-4">
             <span class="mb-2 inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${place.pill}">
