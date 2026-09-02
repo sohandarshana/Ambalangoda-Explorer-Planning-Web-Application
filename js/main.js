@@ -145,6 +145,7 @@ function renderPlaces(places) {
 }
 
 window.togglePlaceFromCard = async function(id) {
+    if (window.loggedInUser !== true) { window.location.href = 'login.html'; return; }
   if (!window.allPlacesData) return;
   const place = window.allPlacesData.find(p => p.id === id);
   if (place) {
@@ -234,6 +235,7 @@ async function fetchPlaceDetails(id) {
 }
 
 window.toggleCurrentPlace = function() {
+    if (window.loggedInUser !== true) { window.location.href = 'login.html'; return; }
   if (window.currentPlace) {
     togglePlaceInItinerary(window.currentPlace);
     const inTrip = isPlaceInItinerary(window.currentPlace.id);
@@ -370,6 +372,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const res = await fetch('api/auth_check.php');
     const data = await res.json();
+    window.loggedInUser = data.loggedIn;
     
     // Find where the dark mode toggle is, so we can insert BEFORE it
     const darkToggle = document.getElementById('darkToggle');
@@ -377,12 +380,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     let authHtml = '';
     if (data.loggedIn) {
       if (data.role === 'admin') {
-        authHtml += <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-coral-600 hover:text-coral-800">Admin</a>;
+        authHtml += '<a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-coral-600 hover:text-coral-800">Admin</a>';
       }
-      authHtml += <div class="ml-2 flex items-center gap-2 rounded-full border border-sand-200 px-3 py-1.5"><span class="text-sm font-medium text-ink-700"> + data.name + </span><button onclick="logout()" class="text-xs text-ink-500 hover:text-ink">Logout</button></div>;
+      authHtml += '<div class="ml-2 flex items-center gap-2 rounded-full border border-sand-200 px-3 py-1.5"><span class="text-sm font-medium text-ink-700">' + data.name + '</span><button onclick="logout()" class="text-xs text-ink-500 hover:text-ink">Logout</button></div>';
     } else {
-      authHtml += <a href="login.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-ink-500 hover:text-ink">Login</a>;
-      authHtml += <a href="register.html" class="rounded-full bg-ocean-600 px-3.5 py-2 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:bg-ocean-500">Register</a>;
+      authHtml += '<a href="login.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-ink-500 hover:text-ink">Login</a>';
+      authHtml += '<a href="register.html" class="rounded-full bg-ocean-600 px-3.5 py-2 text-sm font-semibold text-white transition-colors duration-150 ease-out hover:bg-ocean-500">Register</a>';
     }
     
     // If it's the index, attractions, or planner page, remove static Admin link if it exists
@@ -404,3 +407,4 @@ window.logout = async function() {
   await fetch('api/auth_logout.php');
   window.location.href = 'index.html';
 }
+
