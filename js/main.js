@@ -350,13 +350,13 @@ function initMap(places) {
       
       const customIcon = L.divIcon({
         className: 'custom-div-icon',
-        html: <div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm"></div>,
+        html: `<div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm">${index + 1}</div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       });
       
       const marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
-      marker.bindPopup(<b></b><br>);
+      marker.bindPopup(`<b>${place.name}</b><br>${place.category_label}`);
       markers.push(marker);
     }
   });
