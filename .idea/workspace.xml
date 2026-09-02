@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/09d90b8d-7781-4c23-8a84-8c9eebd92398.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/2e6c58e3-a67a-40cc-b4fa-e17a0f6e5d1c.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/34770e6e-3322-49ca-b96d-a7507707e2de.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/44db75d4-dd63-43c2-b39c-dd3f07738f4d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/47e342c7-da8e-4626-a1cd-c6b79dff9851.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/938e0210-31ff-40fe-b163-a40809386b41.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/94bb382f-125e-422c-9d47-ac474d7490cb.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/c24df3dc-a36d-473b-bd25-7de702394d7d.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/ca221767-574f-45e0-9e69-db56fe23c168.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/d3db3ce5-395d-4e50-822f-242a647e5432.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/d52e3142-70da-450f-a112-8c38f3edf074.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/e82c79b4-8b3c-4029-83c5-254bfbd49898.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HeroAnimation.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapEmbed.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PlaceCard.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SiteFooter.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SiteHeader.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/contexts/TripContext.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/categories.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/data/places.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Admin.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Attractions.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Home.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/PlaceDetail.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pages/Planner.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/types/place.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/itinerary.ts" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "NuwangiMahesha"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/NuwangiMahesha/9abc28df-b49f-4283-849e-38cee4e1f378.git",
+    "accountId": "fb550bcc-cfc2-4a70-8794-0c560eccb5a9"
+  }
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2,
+  "fromUser": false
+}]]></component>
+  <component name="ProjectId" id="3IlHAw67LpooSfCVdva39l12fwo" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/User/Downloads/9abc28df-b49f-4283-849e-38cee4e1f378",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="" />
+      <created>1788332094660</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1788332094660</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
