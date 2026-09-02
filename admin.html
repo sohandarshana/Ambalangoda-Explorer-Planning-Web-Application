@@ -9,6 +9,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="js/tailwind-config.js"></script>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dark.css">
   <style>
     body { font-family: 'Inter', sans-serif; }
     .field {
@@ -95,6 +96,10 @@
       <a href="attractions.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink">Places</a>
       <a href="planner.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink">Day Planner</a>
       <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium bg-coral-100 text-coral-600">Admin</a>
+          <button id="darkToggle" onclick="toggleDark()" title="Toggle dark mode" class="ml-2 rounded-full w-8 h-8 flex items-center justify-center border border-sand-200 text-ink-500 hover:text-ink hover:bg-sand-100 transition-colors" aria-label="Toggle dark mode">
+        <svg id="iconSun" class="hidden" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg id="iconMoon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+      </button>
     </div>
   </nav>
 </header>
@@ -106,7 +111,7 @@
     <div class="flex items-center justify-between">
       <div>
         <h1 class="font-display text-3xl font-bold tracking-tight">Admin Dashboard</h1>
-        <p class="mt-1 text-ink-500 text-sm">Full CRUD — all changes save directly to the MySQL database and appear live on the website.</p>
+        <p class="mt-1 text-ink-500 text-sm">Full CRUD â€” all changes save directly to the MySQL database and appear live on the website.</p>
       </div>
       <button onclick="toggleForm()" id="formToggleBtn" class="inline-flex items-center gap-2 rounded-full bg-ocean-600 px-4 py-2 text-sm font-semibold text-white hover:bg-ocean-700 transition-colors">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
@@ -120,7 +125,7 @@
         <div class="bg-ocean-600 px-6 py-3 flex items-center justify-between">
           <div>
             <h2 class="font-display text-base font-semibold text-white">Add New Place</h2>
-            <p class="text-ocean-100 text-xs">Saved to MySQL database — visible on the website immediately.</p>
+            <p class="text-ocean-100 text-xs">Saved to MySQL database â€” visible on the website immediately.</p>
           </div>
           <button onclick="toggleForm()" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
         </div>
@@ -158,7 +163,7 @@
       </div>
     </div>
 
-    <!-- PLACES TABLE — full width, all rows visible -->
+    <!-- PLACES TABLE â€” full width, all rows visible -->
     <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
       <div class="px-6 py-4 border-b border-sand-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <div>
@@ -265,8 +270,8 @@
         + '</td>'
         + '<td class="px-4 py-3">' + badge(p.category_label) + '</td>'
         + '<td class="px-4 py-3 text-ink-500 tabular-nums whitespace-nowrap">' + p.distanceKm + ' km</td>'
-        + '<td class="px-4 py-3 text-xs text-ink-500 whitespace-nowrap">' + (p.openingHours || '—') + '</td>'
-        + '<td class="px-4 py-3 text-xs text-ink-500 whitespace-nowrap">' + (p.entryFee || '—') + '</td>'
+        + '<td class="px-4 py-3 text-xs text-ink-500 whitespace-nowrap">' + (p.openingHours || 'â€”') + '</td>'
+        + '<td class="px-4 py-3 text-xs text-ink-500 whitespace-nowrap">' + (p.entryFee || 'â€”') + '</td>'
         + '<td class="px-4 py-3 text-right">'
         +   '<div class="inline-flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity">'
         +     '<button onclick="openEdit(\'' + p.id + '\')" title="Edit" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-ocean-700 bg-ocean-100 hover:bg-ocean-600 hover:text-white transition-colors">'

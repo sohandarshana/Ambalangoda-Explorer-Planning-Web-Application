@@ -1,0 +1,59 @@
+/* ═══════════════════════════════════════════════════════
+   DARK MODE — Explore Ambalangoda
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --bg:          #FBF8F2;
+  --bg-2:        #F4EDE1;
+  --bg-3:        #E8DCC6;
+  --surface:     #FFFFFF;
+  --border:      #E8DCC6;
+  --text:        #1B1A17;
+  --text-muted:  #6B655A;
+  --text-faint:  #9A9285;
+  --accent:      #0E6E72;
+  --accent-dark: #0A5458;
+  --header-bg:   rgba(251,248,242,.95);
+}
+html.dark {
+  --bg:          #0F1117;
+  --bg-2:        #161B22;
+  --bg-3:        #1E2430;
+  --surface:     #1A1F2B;
+  --border:      #2A3040;
+  --text:        #E8E3DA;
+  --text-muted:  #8A9098;
+  --text-faint:  #5A6070;
+  --accent:      #12A8AE;
+  --accent-dark: #0E6E72;
+  --header-bg:   rgba(15,17,23,.92);
+}
+html.dark body { background-color: var(--bg) !important; color: var(--text) !important; }
+html.dark header { background-color: var(--header-bg) !important; border-color: var(--border) !important; }
+html.dark .bg-white { background-color: var(--surface) !important; }
+html.dark [class*="bg-sand-50"] { background-color: var(--surface) !important; }
+html.dark [class*="bg-sand-100"] { background-color: var(--bg-2) !important; }
+html.dark [class*="bg-sand-200"] { background-color: var(--bg-3) !important; }
+html.dark [class*="border-sand"] { border-color: var(--border) !important; }
+html.dark [class*="divide-sand"] > * + * { border-color: var(--border) !important; }
+html.dark [class*="text-ink"] { color: var(--text-muted) !important; }
+html.dark .text-ink { color: var(--text) !important; }
+html.dark h1,html.dark h2,html.dark h3,html.dark h4 { color: var(--text) !important; }
+html.dark [class*="font-semibold"]:not(span) { color: var(--text) !important; }
+html.dark [class*="font-bold"]:not(span) { color: var(--text) !important; }
+html.dark [class*="text-ocean-600"] { color: var(--accent) !important; }
+html.dark [class*="bg-ocean-100"] { background-color: rgba(18,168,174,.15) !important; }
+html.dark [class*="text-ocean-700"] { color: var(--accent) !important; }
+html.dark [class*="bg-ocean-900"] { background-color: #050C10 !important; }
+html.dark [class*="bg-ochre-100"] { background-color: rgba(181,112,26,.18) !important; }
+html.dark [class*="bg-coral-100"] { background-color: rgba(168,53,37,.18) !important; }
+html.dark [class*="bg-moss-100"] { background-color: rgba(84,104,59,.2) !important; }
+html.dark input,html.dark select,html.dark textarea { background-color: var(--bg-3) !important; border-color: var(--border) !important; color: var(--text) !important; }
+html.dark input::placeholder,html.dark textarea::placeholder { color: var(--text-faint) !important; }
+html.dark input:focus,html.dark select:focus,html.dark textarea:focus { border-color: var(--accent) !important; background-color: var(--bg-2) !important; }
+html.dark .field { background-color: var(--bg-3) !important; border-color: var(--border) !important; color: var(--text) !important; }
+html.dark .field:focus { border-color: var(--accent) !important; }
+html.dark thead tr { background-color: var(--bg-2) !important; }
+html.dark tr.hover\:bg-sand-50:hover td,html.dark tr:hover td { background-color: var(--bg-3) !important; }
+html.dark ::-webkit-scrollbar { width:6px; height:6px; }
+html.dark ::-webkit-scrollbar-track { background: var(--bg-2); }
+html.dark ::-webkit-scrollbar-thumb { background: var(--border); border-radius:3px; }

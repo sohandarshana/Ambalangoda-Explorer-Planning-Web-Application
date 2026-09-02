@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="crud operations create for the admin panel change 2" />
+    <list default="true" id="84121696-d646-442d-b105-bdcd99da78b6" name="Changes" comment="crud operations create for the admin panel change 2">
+      <change beforePath="$PROJECT_DIR$/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/attractions.html" beforeDir="false" afterPath="$PROJECT_DIR$/attractions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/place.html" beforeDir="false" afterPath="$PROJECT_DIR$/place.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/planner.html" beforeDir="false" afterPath="$PROJECT_DIR$/planner.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
