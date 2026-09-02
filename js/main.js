@@ -72,7 +72,6 @@ function renderCategories(categories, allPlaces) {
   });
   
   container.innerHTML = html;
-  initMap(itinerary);
   window.allPlacesData = allPlaces;
 }
 
@@ -109,7 +108,6 @@ function renderPlaces(places) {
   
   if (places.length === 0) {
     container.innerHTML = '<div class="text-ink-500">No places found.</div>';
-    initMap([]);
     return;
   }
   
@@ -144,7 +142,6 @@ function renderPlaces(places) {
   });
   
   container.innerHTML = html;
-  initMap(itinerary);
 }
 
 window.togglePlaceFromCard = async function(id) {
@@ -163,9 +160,8 @@ async function fetchPlaceDetails(id) {
     
     if (place.error) {
       document.getElementById('place-detail-container').innerHTML = `<div class="text-center py-12 text-ink-500">${place.error}</div>`;
-      initMap([]);
-    return;
-  }
+      return;
+    }
     
     const inTrip = isPlaceInItinerary(place.id);
     window.currentPlace = place;
@@ -273,7 +269,7 @@ function renderPlanner() {
   let html = '';
   itinerary.forEach((place, index) => {
     html += `
-      <div onclick="focusMap(${place.lat}, ${place.lng})" class="group relative flex items-center cursor-pointer gap-4 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
+      <div onclick="focusMap(`${place.lat}`, `${place.lng}`)" class="group relative flex items-center cursor-pointer gap-4 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sand-100 text-sm font-bold text-ink-500">
           ${index + 1}
         </div>
@@ -315,33 +311,23 @@ function initMap(places) {
   if (places.length === 0) {
     if (map) { map.remove(); map = null; }
     mapContainer.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-ink-500 bg-sand-100">Add places to see them on the map</div>';
-    initMap([]);
     return;
   }
   
-  // Initialize map if not exists
   if (!map) {
-    mapContainer.innerHTML = ''; // clear placeholder
+    mapContainer.innerHTML = '';
     map = L.map('map').setView([6.233, 80.054], 13);
-    
-    // Check dark mode
     const isDark = document.documentElement.classList.contains('dark');
-    
     L.tileLayer(isDark ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 19
+      attribution: '&copy; OpenStreetMap contributors &copy; CARTO', subdomains: 'abcd', maxZoom: 19
     }).addTo(map);
   }
   
-  // Clear existing markers and line
   markers.forEach(m => map.removeLayer(m));
   markers = [];
   if (routeLine) map.removeLayer(routeLine);
   
   const latLngs = [];
-  
-  // Add new markers
   places.forEach((place, index) => {
     if (place.lat && place.lng) {
       const lat = parseFloat(place.lat);
@@ -350,26 +336,23 @@ function initMap(places) {
       
       const customIcon = L.divIcon({
         className: 'custom-div-icon',
-        html: `<div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm">${index + 1}</div>`,
+        html: <div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm"> + (index + 1) + </div>,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       });
       
       const marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
-      marker.bindPopup(`<b>${place.name}</b><br>${place.category_label}`);
+      marker.bindPopup(<b> + place.name + </b><br> + place.category_label);
       markers.push(marker);
     }
   });
   
-  // Draw route line
   if (latLngs.length > 1) {
     routeLine = L.polyline(latLngs, {color: '#D08A22', weight: 4, dashArray: '5, 10'}).addTo(map);
   }
   
-  // Fit bounds to show all markers
   if (latLngs.length > 0) {
-    const bounds = L.latLngBounds(latLngs);
-    map.fitBounds(bounds, {padding: [50, 50]});
+    map.fitBounds(L.latLngBounds(latLngs), {padding: [50, 50]});
   }
 }
 
