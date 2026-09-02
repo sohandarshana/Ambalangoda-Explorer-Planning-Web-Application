@@ -9,56 +9,97 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/dark.css">
   <style>
+    body { font-family: 'Inter', sans-serif; }
+
+    /* ── Hero ── */
     .hero-bg {
-      background-image: linear-gradient(to bottom, rgba(7,30,34,.55) 0%, rgba(7,30,34,.3) 50%, rgba(7,30,34,.75) 100%),
-                        url('09d90b8d-7781-4c23-8a84-8c9eebd92398.jpg');
+      background-image:
+        linear-gradient(to bottom, rgba(5,18,20,.6) 0%, rgba(5,18,20,.25) 45%, rgba(5,18,20,.82) 100%),
+        url('uploads/68.jpg');
       background-size: cover;
-      background-position: center 40%;
+      background-position: center 55%;
     }
-    .nav-scroll { transition: background .3s, box-shadow .3s; }
-    .place-card { transition: transform .2s, box-shadow .2s; }
-    .place-card:hover { transform: translateY(-4px); }
-    .stat-num { font-variant-numeric: tabular-nums; }
-    @keyframes fadeUp { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-    .fade-up { animation: fadeUp .7s ease both; }
-    .fade-up-2 { animation: fadeUp .7s .15s ease both; }
-    .fade-up-3 { animation: fadeUp .7s .3s ease both; }
-    html.dark .hero-overlay { background: linear-gradient(to bottom, rgba(0,0,0,.65) 0%, rgba(0,0,0,.35) 50%, rgba(0,0,0,.85) 100%); }
+
+    /* ── Sticky nav transition ── */
+    #siteHeader { transition: background .35s, box-shadow .35s; }
+
+    /* ── Place cards ── */
+    .place-card { transition: transform .22s, box-shadow .22s; }
+    .place-card:hover { transform: translateY(-5px); box-shadow: 0 12px 32px rgba(0,0,0,.12); }
+
+    /* ── Gallery grid ── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 260px 260px;
+      gap: 12px;
+    }
+    .g1 { grid-column: 1 / 6; grid-row: 1 / 2; }
+    .g2 { grid-column: 6 / 10; grid-row: 1 / 2; }
+    .g3 { grid-column: 10 / 13; grid-row: 1 / 3; }
+    .g4 { grid-column: 1 / 4; grid-row: 2 / 3; }
+    .g5 { grid-column: 4 / 10; grid-row: 2 / 3; }
+    .gallery-img {
+      width: 100%; height: 100%; object-fit: cover;
+      border-radius: 12px; display: block;
+      transition: transform .4s, filter .4s;
+    }
+    .gallery-item { overflow: hidden; border-radius: 12px; position: relative; cursor: pointer; }
+    .gallery-item:hover .gallery-img { transform: scale(1.06); filter: brightness(.85); }
+    .gallery-item .overlay-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(5,18,20,.85), transparent);
+      padding: 1.5rem 1rem 0.75rem;
+      color: #FBF8F2; font-size: .8rem; font-weight: 600;
+      opacity: 0; transition: opacity .3s;
+    }
+    .gallery-item:hover .overlay-label { opacity: 1; }
+
+    /* ── Fade-up animation ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    .fu  { animation: fadeUp .7s ease both; }
+    .fu2 { animation: fadeUp .7s .15s ease both; }
+    .fu3 { animation: fadeUp .7s .3s ease both; }
+
+    /* ── Dark mode gallery ── */
+    html.dark .gallery-item { box-shadow: 0 0 0 1px #2A3040; }
     html.dark .place-card { background-color: #1A1F2B !important; border-color: #2A3040 !important; }
-    html.dark .feature-card { background-color: #1A1F2B !important; border-color: #2A3040 !important; }
-    html.dark footer { background-color: #0F1117 !important; border-color: #2A3040 !important; }
+    html.dark .feature-card { background-color: #161B22 !important; border-color: rgba(255,255,255,.08) !important; }
+    html.dark footer { background-color: #0A0E14 !important; border-color: #2A3040 !important; }
+    html.dark .cat-section { background-color: #161B22 !important; }
+
+    /* ── Mobile gallery ── */
+    @media (max-width: 768px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 180px 180px 180px; }
+      .g1 { grid-column: 1/2; grid-row:1/2; }
+      .g2 { grid-column: 2/3; grid-row:1/2; }
+      .g3 { grid-column: 1/2; grid-row:2/4; }
+      .g4 { grid-column: 2/3; grid-row:2/3; }
+      .g5 { grid-column: 2/3; grid-row:3/4; }
+    }
   </style>
 </head>
 <body class="bg-sand-50 text-ink min-h-screen flex flex-col">
 
-<!-- ══════════════════════════════════════
-     NAVIGATION
-═══════════════════════════════════════ -->
-<header id="siteHeader" class="fixed inset-x-0 top-0 z-50 nav-scroll">
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<header id="siteHeader" class="fixed inset-x-0 top-0 z-50">
   <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
-    <!-- Logo -->
     <a href="index.html" class="font-display text-lg font-semibold tracking-tight text-sand-50 flex-shrink-0">
       Explore<span class="text-ochre-500">Ambalangoda</span>
     </a>
-
-    <!-- Nav Links (desktop) -->
     <div class="hidden items-center gap-1 md:flex">
-      <a href="index.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-sand-50 bg-white/10">Home</a>
-      <a href="attractions.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-sand-100/80 hover:text-sand-50 transition-colors">Places</a>
-      <a href="planner.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-sand-100/80 hover:text-sand-50 transition-colors">Day Planner</a>
-      <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-coral-300 hover:text-coral-200 transition-colors">Admin</a>
+      <a href="index.html"        class="rounded-full px-3.5 py-2 text-sm font-medium text-sand-50 bg-white/12">Home</a>
+      <a href="attractions.html"  class="rounded-full px-3.5 py-2 text-sm font-medium text-sand-200/80 hover:text-sand-50 transition-colors">Places</a>
+      <a href="planner.html"      class="rounded-full px-3.5 py-2 text-sm font-medium text-sand-200/80 hover:text-sand-50 transition-colors">Day Planner</a>
+      <a href="admin.html"        class="rounded-full px-3.5 py-2 text-sm font-medium text-coral-300 hover:text-coral-200 transition-colors">Admin</a>
     </div>
-
-    <!-- Right side actions -->
     <div class="flex items-center gap-2">
-      <!-- Dark mode toggle -->
       <button id="darkToggle" onclick="toggleDark()" title="Toggle dark mode"
         class="rounded-full w-9 h-9 flex items-center justify-center border border-white/25 text-sand-100 hover:bg-white/15 transition-colors">
         <svg id="iconSun" class="hidden" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
         <svg id="iconMoon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
-      <!-- Plan my day CTA -->
-      <a href="planner.html" class="hidden sm:inline-flex items-center gap-2 rounded-full bg-ochre-600 px-4 py-2 text-sm font-semibold text-sand-50 hover:bg-ochre-500 transition-colors">
+      <a href="planner.html" class="hidden sm:inline-flex items-center gap-2 rounded-full bg-ochre-600 px-4 py-2 text-sm font-semibold text-sand-50 hover:bg-ochre-500 transition-colors shadow-md">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg>
         Plan my day
       </a>
@@ -68,173 +109,174 @@
 
 <main class="flex-1">
 
-  <!-- ══════════════════════════════════════
-       HERO SECTION
-  ═══════════════════════════════════════ -->
+  <!-- ═══════════════════ HERO ═══════════════════ -->
   <section class="hero-bg relative min-h-screen flex flex-col">
-    <div class="hero-overlay absolute inset-0" style="background:linear-gradient(to bottom, rgba(7,30,34,.55) 0%, rgba(7,30,34,.25) 55%, rgba(7,30,34,.85) 100%);"></div>
-
     <!-- Hero content -->
-    <div class="relative z-10 flex flex-1 flex-col items-center justify-center text-center px-6 pt-24 pb-32">
-      <span class="fade-up mb-5 inline-block rounded-full border border-ochre-500/50 bg-ochre-600/20 px-4 py-1.5 text-xs font-semibold tracking-widest text-ochre-500 uppercase backdrop-blur">
-        Southern Sri Lanka · Galle District
+    <div class="relative z-10 flex flex-1 flex-col items-center justify-center text-center px-6 pt-28 pb-36">
+      <span class="fu mb-5 inline-block rounded-full border border-ochre-500/50 bg-ochre-600/20 px-4 py-1.5 text-xs font-semibold tracking-widest text-ochre-400 uppercase backdrop-blur-sm">
+        Southern Sri Lanka &middot; Galle District
       </span>
-      <h1 class="fade-up-2 font-display text-5xl font-bold tracking-tight text-sand-50 sm:text-6xl md:text-7xl lg:text-8xl leading-tight max-w-5xl">
+      <h1 class="fu2 font-display text-5xl font-bold tracking-tight text-sand-50 sm:text-6xl md:text-7xl lg:text-8xl leading-tight max-w-5xl">
         A quiet town with<br>
         <span class="text-ochre-500">loud traditions.</span>
       </h1>
-      <p class="fade-up-3 mt-6 max-w-2xl text-lg text-sand-200 sm:text-xl leading-relaxed">
-        Ambalangoda is Sri Lanka's centre for ritual masks, string puppetry, and coastal heritage — all within a 25 km radius. Plan your perfect day here.
+      <p class="fu3 mt-6 max-w-2xl text-lg text-sand-200 sm:text-xl leading-relaxed">
+        Ambalangoda is Sri Lanka's home of ritual masks, stilt fishermen, puppet theatre, and pristine beaches — all within 25 km. Plan your perfect day here.
       </p>
-      <div class="fade-up-3 mt-10 flex flex-wrap items-center justify-center gap-4">
-        <a href="attractions.html" class="rounded-full bg-sand-50 px-7 py-3.5 text-sm font-semibold text-ocean-900 hover:bg-sand-200 transition-colors shadow-lg">
+      <div class="fu3 mt-10 flex flex-wrap items-center justify-center gap-4">
+        <a href="attractions.html" class="rounded-full bg-sand-50 px-7 py-3.5 text-sm font-semibold text-ocean-900 hover:bg-sand-200 transition-colors shadow-xl">
           Explore places
         </a>
-        <a href="planner.html" class="rounded-full border border-sand-50/30 bg-ocean-900/40 px-7 py-3.5 text-sm font-semibold text-sand-50 backdrop-blur hover:bg-ocean-900/60 transition-colors">
+        <a href="planner.html" class="rounded-full border border-sand-50/30 bg-black/25 px-7 py-3.5 text-sm font-semibold text-sand-50 backdrop-blur hover:bg-black/40 transition-colors">
           Start planning
         </a>
       </div>
     </div>
 
     <!-- Stats bar -->
-    <div class="relative z-10 border-t border-white/10 bg-ocean-900/60 backdrop-blur-md">
+    <div class="relative z-10 border-t border-white/10 bg-black/45 backdrop-blur-md">
       <div class="mx-auto max-w-7xl px-6 py-5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-        <div>
-          <div class="stat-num text-2xl font-bold text-sand-50">10+</div>
-          <div class="text-xs text-sand-300 mt-0.5 uppercase tracking-wide">Attractions</div>
-        </div>
-        <div>
-          <div class="stat-num text-2xl font-bold text-sand-50">25 km</div>
-          <div class="text-xs text-sand-300 mt-0.5 uppercase tracking-wide">Radius covered</div>
-        </div>
-        <div>
-          <div class="stat-num text-2xl font-bold text-sand-50">7</div>
-          <div class="text-xs text-sand-300 mt-0.5 uppercase tracking-wide">Categories</div>
-        </div>
-        <div>
-          <div class="stat-num text-2xl font-bold text-sand-50">Free</div>
-          <div class="text-xs text-sand-300 mt-0.5 uppercase tracking-wide">Day planner</div>
-        </div>
+        <div><div class="text-2xl font-bold text-sand-50">10+</div><div class="text-xs text-sand-400 mt-0.5 uppercase tracking-wide">Attractions</div></div>
+        <div><div class="text-2xl font-bold text-sand-50">25 km</div><div class="text-xs text-sand-400 mt-0.5 uppercase tracking-wide">Area covered</div></div>
+        <div><div class="text-2xl font-bold text-sand-50">7</div><div class="text-xs text-sand-400 mt-0.5 uppercase tracking-wide">Categories</div></div>
+        <div><div class="text-2xl font-bold text-sand-50">Free</div><div class="text-xs text-sand-400 mt-0.5 uppercase tracking-wide">Day planner</div></div>
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       FEATURED PLACES
-  ═══════════════════════════════════════ -->
+  <!-- ═══════════════════ GALLERY ═══════════════════ -->
   <section class="py-20 px-6 bg-sand-50">
+    <div class="mx-auto max-w-7xl">
+      <div class="text-center mb-10">
+        <p class="text-xs font-semibold uppercase tracking-widest text-ocean-600 mb-2">Culture &amp; Nature</p>
+        <h2 class="font-display text-3xl font-bold tracking-tight sm:text-4xl">A glimpse of Ambalangoda</h2>
+        <p class="mt-2 text-ink-500 max-w-xl mx-auto">From iconic stilt fishermen to vibrant kolam masks — every corner tells a story.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item g1">
+          <img src="uploads/images (2).jpg" alt="Ambalangoda traditional mask" class="gallery-img">
+          <div class="overlay-label">Traditional Kolam Masks</div>
+        </div>
+        <div class="gallery-item g2">
+          <img src="uploads/images (3).jpg" alt="Ambalangoda devil mask" class="gallery-img">
+          <div class="overlay-label">Devil Dance Masks</div>
+        </div>
+        <div class="gallery-item g3">
+          <img src="uploads/68.jpg" alt="Stilt fishermen at sunset" class="gallery-img">
+          <div class="overlay-label">Stilt Fishermen at Sunset</div>
+        </div>
+        <div class="gallery-item g4">
+          <img src="uploads/images (4).jpg" alt="Kolam dancer" class="gallery-img">
+          <div class="overlay-label">Kolam Dance Performance</div>
+        </div>
+        <div class="gallery-item g5">
+          <img src="uploads/images (5).jpg" alt="Ambalangoda lighthouse" class="gallery-img">
+          <div class="overlay-label">Ambalangoda Lighthouse</div>
+        </div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <a href="attractions.html" class="inline-flex items-center gap-2 rounded-full border border-ocean-600/40 px-6 py-2.5 text-sm font-semibold text-ocean-600 hover:bg-ocean-100 transition-colors">
+          Explore all attractions
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FEATURED PLACES ═══════════════════ -->
+  <section class="py-20 px-6 bg-sand-100">
     <div class="mx-auto max-w-7xl">
       <div class="flex items-end justify-between mb-10">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-widest text-ocean-600 mb-2">Explore</p>
-          <h2 class="font-display text-3xl font-bold tracking-tight sm:text-4xl">Top attractions</h2>
-          <p class="mt-2 text-ink-500 max-w-xl">Discover the best cultural, natural and coastal spots Ambalangoda has to offer.</p>
+          <p class="text-xs font-semibold uppercase tracking-widest text-ocean-600 mb-2">Top picks</p>
+          <h2 class="font-display text-3xl font-bold tracking-tight sm:text-4xl">Featured attractions</h2>
+          <p class="mt-2 text-ink-500 max-w-lg">Discover the best cultural, natural and coastal spots nearby.</p>
         </div>
         <a href="attractions.html" class="hidden sm:inline-flex items-center gap-2 text-sm font-semibold text-ocean-600 hover:text-ocean-700 transition-colors">
-          View all places
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          View all <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
-
       <div id="placesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        <!-- Injected by JS -->
         <div class="col-span-full text-center text-ink-500 py-10">Loading places...</div>
       </div>
-
       <div class="mt-8 text-center sm:hidden">
         <a href="attractions.html" class="inline-flex items-center gap-2 text-sm font-semibold text-ocean-600">View all places <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       HOW IT WORKS
-  ═══════════════════════════════════════ -->
+  <!-- ═══════════════════ HOW IT WORKS ═══════════════════ -->
   <section class="py-20 px-6 bg-ocean-900">
     <div class="mx-auto max-w-7xl">
       <div class="text-center mb-14">
         <p class="text-xs font-semibold uppercase tracking-widest text-ocean-500 mb-2">Simple process</p>
         <h2 class="font-display text-3xl font-bold text-sand-50 sm:text-4xl">Plan your day in 3 steps</h2>
-        <p class="mt-3 text-sand-300 max-w-xl mx-auto">Our day planner helps you put together the perfect itinerary based on your time and interests.</p>
+        <p class="mt-3 text-sand-400 max-w-xl mx-auto">Our planner helps you build the perfect itinerary based on your interests and available time.</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="feature-card relative rounded-2xl border border-white/10 bg-white/5 p-7 text-center">
-          <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-ocean-600/30 border border-ocean-500/30">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="feature-card relative rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+          <div class="absolute top-6 right-7 text-5xl font-bold text-white/5 font-display select-none leading-none">01</div>
+          <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-ocean-600/25 border border-ocean-500/25">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#12888D" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           </div>
-          <div class="absolute top-5 right-6 text-4xl font-bold text-white/5 font-display select-none">01</div>
           <h3 class="font-display text-lg font-semibold text-sand-50 mb-2">Browse attractions</h3>
-          <p class="text-sand-400 text-sm leading-relaxed">Explore all 10 curated locations — museums, beaches, temples, turtle hatcheries and more.</p>
+          <p class="text-sand-400 text-sm leading-relaxed">Explore 10+ curated locations — museums, beaches, temples, turtle hatcheries and more.</p>
         </div>
-        <div class="feature-card relative rounded-2xl border border-ochre-600/30 bg-ochre-600/10 p-7 text-center">
-          <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-ochre-600/30 border border-ochre-500/30">
+        <div class="feature-card relative rounded-2xl border border-ochre-600/30 bg-ochre-600/10 p-8 text-center">
+          <div class="absolute top-6 right-7 text-5xl font-bold text-white/5 font-display select-none leading-none">02</div>
+          <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-ochre-600/25 border border-ochre-500/25">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D08A22" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           </div>
-          <div class="absolute top-5 right-6 text-4xl font-bold text-white/5 font-display select-none">02</div>
           <h3 class="font-display text-lg font-semibold text-sand-50 mb-2">Add to your day</h3>
-          <p class="text-sand-400 text-sm leading-relaxed">Tap any place to add it to your personalised itinerary. The planner tracks travel time and visit duration.</p>
+          <p class="text-sand-400 text-sm leading-relaxed">Tap any place to add it to your itinerary. The planner tracks duration, distance and timing.</p>
         </div>
-        <div class="feature-card relative rounded-2xl border border-white/10 bg-white/5 p-7 text-center">
-          <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-moss-600/30 border border-moss-600/30">
+        <div class="feature-card relative rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
+          <div class="absolute top-6 right-7 text-5xl font-bold text-white/5 font-display select-none leading-none">03</div>
+          <div class="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-moss-600/25 border border-moss-600/25">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#54683B" stroke-width="2"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/></svg>
           </div>
-          <div class="absolute top-5 right-6 text-4xl font-bold text-white/5 font-display select-none">03</div>
           <h3 class="font-display text-lg font-semibold text-sand-50 mb-2">Go explore!</h3>
-          <p class="text-sand-400 text-sm leading-relaxed">Your complete day plan is ready — opening hours, entry fees, distances and contact info all in one place.</p>
+          <p class="text-sand-400 text-sm leading-relaxed">Your complete plan is ready — opening hours, entry fees, contact info all in one view.</p>
         </div>
       </div>
       <div class="mt-10 text-center">
         <a href="planner.html" class="inline-flex items-center gap-2 rounded-full bg-ochre-600 px-7 py-3.5 text-sm font-semibold text-sand-50 hover:bg-ochre-500 transition-colors">
-          Start planning for free
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Start planning for free <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       CATEGORIES STRIP
-  ═══════════════════════════════════════ -->
-  <section class="py-16 px-6 bg-sand-100">
-    <div class="mx-auto max-w-7xl">
-      <p class="text-center text-xs font-semibold uppercase tracking-widest text-ink-500 mb-8">Browse by category</p>
-      <div class="flex flex-wrap justify-center gap-3" id="categoryStrip">
-        <!-- Injected by JS -->
-      </div>
+  <!-- ═══════════════════ CATEGORIES ═══════════════════ -->
+  <section class="cat-section py-16 px-6 bg-sand-100">
+    <div class="mx-auto max-w-7xl text-center">
+      <p class="text-xs font-semibold uppercase tracking-widest text-ink-500 mb-6">Browse by category</p>
+      <div class="flex flex-wrap justify-center gap-3" id="categoryStrip"></div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       CALL TO ACTION BANNER
-  ═══════════════════════════════════════ -->
-  <section class="py-20 px-6"
-    style="background-image:linear-gradient(135deg,rgba(7,56,59,.97) 0%,rgba(11,31,34,.98) 100%);">
+  <!-- ═══════════════════ CTA BANNER ═══════════════════ -->
+  <section class="py-20 px-6" style="background:linear-gradient(135deg,rgba(7,56,59,.97) 0%,rgba(7,15,17,.98) 100%);">
     <div class="mx-auto max-w-3xl text-center">
       <h2 class="font-display text-3xl font-bold text-sand-50 sm:text-4xl">Ready to explore Ambalangoda?</h2>
       <p class="mt-4 text-sand-300 text-lg">Build your custom day itinerary in minutes — completely free.</p>
       <div class="mt-8 flex flex-wrap justify-center gap-4">
-        <a href="attractions.html" class="rounded-full bg-sand-50 px-7 py-3.5 text-sm font-semibold text-ocean-900 hover:bg-sand-200 transition-colors">
-          Browse all places
-        </a>
-        <a href="planner.html" class="rounded-full border border-sand-50/25 px-7 py-3.5 text-sm font-semibold text-sand-100 hover:bg-white/10 transition-colors">
-          Open day planner
-        </a>
+        <a href="attractions.html" class="rounded-full bg-sand-50 px-7 py-3.5 text-sm font-semibold text-ocean-900 hover:bg-sand-200 transition-colors">Browse all places</a>
+        <a href="planner.html" class="rounded-full border border-sand-50/25 px-7 py-3.5 text-sm font-semibold text-sand-100 hover:bg-white/10 transition-colors">Open day planner</a>
       </div>
     </div>
   </section>
 
 </main>
 
-<!-- ══════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════ -->
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
 <footer class="border-t border-sand-200 bg-sand-100 py-12">
   <div class="mx-auto max-w-7xl px-6">
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-10">
       <div>
-        <div class="font-display text-lg font-semibold text-ink mb-2">
-          Explore<span class="text-ocean-600">Ambalangoda</span>
-        </div>
+        <div class="font-display text-lg font-semibold text-ink mb-2">Explore<span class="text-ocean-600">Ambalangoda</span></div>
         <p class="text-sm text-ink-500 leading-relaxed">A tourist information and day visit planning system for the coastal town of Ambalangoda, Sri Lanka.</p>
       </div>
       <div>
@@ -248,7 +290,7 @@
       </div>
       <div>
         <h4 class="text-xs font-semibold uppercase tracking-widest text-ink-500 mb-4">Categories</h4>
-        <ul class="space-y-2 text-sm" id="footerCategories">
+        <ul class="space-y-2 text-sm">
           <li><a href="attractions.html" class="text-ink-500 hover:text-ink transition-colors">Cultural Attractions</a></li>
           <li><a href="attractions.html" class="text-ink-500 hover:text-ink transition-colors">Beaches</a></li>
           <li><a href="attractions.html" class="text-ink-500 hover:text-ink transition-colors">Religious Sites</a></li>
@@ -257,99 +299,92 @@
       </div>
     </div>
     <div class="border-t border-sand-200 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-ink-500">
-      <p>&copy; 2026 Explore Ambalangoda. University Project — G H S D Deshapriya · E 2410536</p>
-      <p>Built with HTML, CSS, JavaScript, PHP &amp; MySQL</p>
+      <p>&copy; 2026 Explore Ambalangoda &mdash; G H S D Deshapriya &middot; E 2410536</p>
+      <p>HTML &middot; CSS &middot; JavaScript &middot; PHP &middot; MySQL</p>
     </div>
   </div>
 </footer>
 
 <script src="js/main.js"></script>
 <script>
-  /* ── Nav: solid background on scroll ── */
-  var header = document.getElementById('siteHeader');
+  /* ── Sticky nav ── */
+  var hdr = document.getElementById('siteHeader');
   window.addEventListener('scroll', function() {
     if (window.scrollY > 60) {
-      header.style.background = 'rgba(11,31,34,.96)';
-      header.style.boxShadow = '0 1px 0 rgba(255,255,255,.06)';
-      header.style.backdropFilter = 'blur(12px)';
+      hdr.style.cssText = 'background:rgba(7,30,34,.95);box-shadow:0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(14px);';
     } else {
-      header.style.background = 'transparent';
-      header.style.boxShadow = 'none';
+      hdr.style.cssText = 'background:transparent;box-shadow:none;backdrop-filter:none;';
     }
   });
 
-  /* ── Load featured places (first 8) ── */
+  /* ── Featured places ── */
+  var PILL = {
+    'Cultural Attraction':'bg-ochre-100 text-ochre-600',
+    'Religious Site':'bg-ocean-100 text-ocean-700',
+    'Beach':'bg-blue-100 text-blue-700',
+    'Heritage & Nature':'bg-moss-100 text-moss-600',
+    'Wildlife Attraction':'bg-moss-100 text-moss-600',
+    'Cafe':'bg-coral-100 text-coral-600',
+    'Restaurant':'bg-coral-100 text-coral-600'
+  };
+  var STRIP = {
+    'Cultural Attraction':'border-ochre-600/40 text-ochre-600 hover:bg-ochre-100',
+    'Religious Site':'border-ocean-600/40 text-ocean-700 hover:bg-ocean-100',
+    'Beach':'border-blue-500/40 text-blue-700 hover:bg-blue-50',
+    'Heritage & Nature':'border-moss-600/40 text-moss-600 hover:bg-moss-100',
+    'Wildlife Attraction':'border-moss-600/40 text-moss-600 hover:bg-moss-100',
+    'Cafe':'border-coral-600/40 text-coral-600 hover:bg-coral-100',
+    'Restaurant':'border-coral-600/40 text-coral-600 hover:bg-coral-100'
+  };
+
   fetch('api/get_places.php')
-    .then(function(r) { return r.json(); })
-    .then(function(places) {
+    .then(function(r){return r.json();})
+    .then(function(places){
+      /* places grid */
       var grid = document.getElementById('placesGrid');
-      var top = places.slice(0, 8);
-      if (!top.length) { grid.innerHTML = '<p class="col-span-full text-center text-ink-500 py-10">No places found.</p>'; return; }
-
-      var PILL = {
-        'Cultural Attraction': 'bg-ochre-100 text-ochre-600',
-        'Religious Site': 'bg-ocean-100 text-ocean-700',
-        'Beach': 'bg-blue-100 text-blue-700',
-        'Heritage & Nature': 'bg-moss-100 text-moss-600',
-        'Wildlife Attraction': 'bg-moss-100 text-moss-600',
-        'Cafe': 'bg-coral-100 text-coral-600',
-        'Restaurant': 'bg-coral-100 text-coral-600'
-      };
-
-      grid.innerHTML = top.map(function(p) {
-        var img = (p.imageUrl || '').replace(/^\//, '');
-        var pillCls = PILL[p.category_label] || 'bg-sand-100 text-ink-500';
-        return '<a href="place.html?id=' + p.id + '" class="place-card group block rounded-2xl overflow-hidden border border-sand-200 bg-white shadow-sm hover:shadow-md">'
-          + '  <div class="relative h-44 overflow-hidden bg-sand-200">'
-          + (img ? '<img src="' + img + '" alt="' + p.name + '" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">' : '<div class="w-full h-full flex items-center justify-center text-sand-300"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>')
-          + '    <span class="absolute bottom-3 left-3 rounded-full px-2.5 py-0.5 text-xs font-semibold backdrop-blur ' + pillCls + '">' + p.category_label + '</span>'
-          + '  </div>'
-          + '  <div class="p-4">'
-          + '    <h3 class="font-semibold text-ink leading-tight group-hover:text-ocean-600 transition-colors">' + p.name + '</h3>'
-          + '    <p class="mt-1 text-xs text-ink-500 line-clamp-2 leading-relaxed">' + (p.summary || '') + '</p>'
-          + '    <div class="mt-3 flex items-center justify-between text-xs text-ink-500">'
-          + '      <span>' + p.distanceKm + ' km from town</span>'
-          + '      <span class="text-ocean-600 font-semibold group-hover:underline">View &rarr;</span>'
-          + '    </div>'
-          + '  </div>'
-          + '</a>';
+      var top = places.slice(0,8);
+      grid.innerHTML = top.map(function(p){
+        var img = (p.imageUrl||'').replace(/^\//,'');
+        var pc  = PILL[p.category_label]||'bg-sand-100 text-ink-500';
+        return '<a href="place.html?id='+p.id+'" class="place-card group block rounded-2xl overflow-hidden border border-sand-200 bg-white shadow-sm">'
+          +'<div class="relative h-44 overflow-hidden bg-sand-200">'
+          +(img?'<img src="'+img+'" alt="'+p.name+'" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">'
+               :'<div class="w-full h-full flex items-center justify-center"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#D6C4A4" stroke-width="1"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></div>')
+          +'<span class="absolute bottom-3 left-3 rounded-full px-2.5 py-0.5 text-xs font-semibold '+pc+' backdrop-blur-sm">'+p.category_label+'</span>'
+          +'</div>'
+          +'<div class="p-4">'
+          +'<h3 class="font-semibold text-ink leading-tight group-hover:text-ocean-600 transition-colors">'+p.name+'</h3>'
+          +'<p class="mt-1 text-xs text-ink-500 leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">'+(p.summary||'')+'</p>'
+          +'<div class="mt-3 flex items-center justify-between text-xs text-ink-500">'
+          +'<span>'+p.distanceKm+' km away</span>'
+          +'<span class="text-ocean-600 font-semibold">View &rarr;</span>'
+          +'</div></div></a>';
       }).join('');
 
-      /* Category strip */
+      /* category strip */
       var cats = {};
-      places.forEach(function(p) { cats[p.category_label] = true; });
-      var STRIP_PILL = {
-        'Cultural Attraction': 'border-ochre-600/40 text-ochre-600 hover:bg-ochre-100',
-        'Religious Site': 'border-ocean-600/40 text-ocean-700 hover:bg-ocean-100',
-        'Beach': 'border-blue-500/40 text-blue-700 hover:bg-blue-50',
-        'Heritage & Nature': 'border-moss-600/40 text-moss-600 hover:bg-moss-100',
-        'Wildlife Attraction': 'border-moss-600/40 text-moss-600 hover:bg-moss-100',
-        'Cafe': 'border-coral-600/40 text-coral-600 hover:bg-coral-100',
-        'Restaurant': 'border-coral-600/40 text-coral-600 hover:bg-coral-100'
-      };
-      document.getElementById('categoryStrip').innerHTML = Object.keys(cats).map(function(cat) {
-        var cls = STRIP_PILL[cat] || 'border-sand-300 text-ink-500 hover:bg-sand-100';
-        return '<a href="attractions.html" class="rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors ' + cls + '">' + cat + '</a>';
+      places.forEach(function(p){cats[p.category_label]=true;});
+      document.getElementById('categoryStrip').innerHTML = Object.keys(cats).map(function(c){
+        return '<a href="attractions.html" class="rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors '+(STRIP[c]||'border-sand-300 text-ink-500 hover:bg-sand-100')+'">'+c+'</a>';
       }).join('');
     })
-    .catch(function() {
-      document.getElementById('placesGrid').innerHTML = '<p class="col-span-full text-center text-ink-500 py-10">Could not load places.</p>';
+    .catch(function(){
+      document.getElementById('placesGrid').innerHTML='<p class="col-span-full text-center text-ink-500 py-10">Could not load places.</p>';
     });
 
   /* ── Dark mode ── */
-  function applyDark(on) {
-    document.documentElement.classList.toggle('dark', on);
-    var sun = document.getElementById('iconSun');
-    var moon = document.getElementById('iconMoon');
-    if (sun) sun.classList.toggle('hidden', !on);
-    if (moon) moon.classList.toggle('hidden', on);
+  function applyDark(on){
+    document.documentElement.classList.toggle('dark',on);
+    var s=document.getElementById('iconSun'),m=document.getElementById('iconMoon');
+    if(s)s.classList.toggle('hidden',!on);
+    if(m)m.classList.toggle('hidden',on);
   }
-  function toggleDark() {
-    var isDark = !document.documentElement.classList.contains('dark');
-    localStorage.setItem('darkMode', isDark ? '1' : '0');
-    applyDark(isDark);
+  function toggleDark(){
+    var d=!document.documentElement.classList.contains('dark');
+    localStorage.setItem('darkMode',d?'1':'0');
+    applyDark(d);
   }
-  (function() { applyDark(localStorage.getItem('darkMode') === '1'); })();
+  (function(){applyDark(localStorage.getItem('darkMode')==='1');})();
 </script>
 </body>
 </html>
