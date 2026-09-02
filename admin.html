@@ -1,140 +1,753 @@
 <!doctype html>
-<html lang=""en"">
+<html lang="en">
 <head>
-  <meta charset=""UTF-8"">
-  <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Panel - Explore Ambalangoda</title>
-  <script src=""https://cdn.tailwindcss.com""></script>
-  <script src=""js/tailwind-config.js""></script>
-  <link rel=""stylesheet"" href=""css/style.css"">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/tailwind-config.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .input-field {
+      width: 100%; padding: 0.55rem 0.85rem;
+      border-radius: 0.5rem; border: 1.5px solid #E8DCC6;
+      font-size: 0.875rem; color: #1B1A17; background: #FBF8F2;
+      outline: none; transition: border-color 0.15s, background 0.15s;
+    }
+    .input-field:focus { border-color: #0E6E72; background: #fff; }
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+      z-index: 100; display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-box {
+      background: #fff; border-radius: 1.25rem; width: 100%; max-width: 640px;
+      max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      padding: 0.75rem 1.25rem; border-radius: 0.75rem;
+      font-weight: 600; font-size: 0.875rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+      z-index: 9999; transition: opacity 0.3s; opacity: 0; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #E8EDDC; color: #54683B; }
+    .toast.error   { background: #F8E2DD; color: #A83525; }
+  </style>
 </head>
-<body class=""bg-sand-50 text-ink min-h-screen flex flex-col"">
-  <header class=""sticky top-0 z-20 border-b border-sand-200 bg-sand-50/95 backdrop-blur"">
-    <nav class=""mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6"">
-      <a href=""index.html"" class=""font-display text-lg font-semibold tracking-tight text-ink"">
-        Explore<span class=""text-ocean-600"">Ambalangoda</span> <span class=""text-coral-600 ml-2 font-bold text-sm"">ADMIN</span>
+<body class="bg-sand-50 text-ink min-h-screen flex flex-col">
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="bg-ocean-600 px-6 py-4 rounded-t-2xl flex items-center justify-between">
+        <div>
+          <h2 class="font-display text-lg font-semibold text-white">Edit Place</h2>
+          <p class="text-ocean-100 text-xs mt-0.5">Update the details for this attraction.</p>
+        </div>
+        <button onclick="closeModal()" class="text-white/70 hover:text-white text-2xl leading-none">&times;</button>
+      </div>
+      <form id="editForm" class="p-6 grid grid-cols-2 gap-4">
+        <input type="hidden" id="e_id">
+        <div class="col-span-2">
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Place Name *</label>
+          <input type="text" id="e_name" required class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Category *</label>
+          <select id="e_cat" required class="input-field">
+            <option value="Cultural Attraction">Cultural Attraction</option>
+            <option value="Religious Site">Religious Site</option>
+            <option value="Beach">Beach</option>
+            <option value="Heritage & Nature">Heritage &amp; Nature</option>
+            <option value="Wildlife Attraction">Wildlife Attraction</option>
+            <option value="Cafe">Cafe</option>
+            <option value="Restaurant">Restaurant</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Distance (km) *</label>
+          <input type="number" step="0.1" min="0" id="e_dist" required class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Opening Hours</label>
+          <input type="text" id="e_hours" placeholder="e.g. Daily 8 AM – 5 PM" class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Entry Fee</label>
+          <input type="text" id="e_fee" placeholder="e.g. Free / LKR 500" class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Contact</label>
+          <input type="text" id="e_contact" placeholder="e.g. +94 91 225 8373" class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Visit Duration (min)</label>
+          <input type="number" min="5" id="e_duration" class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Best Time to Visit</label>
+          <input type="text" id="e_besttime" placeholder="e.g. Morning" class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Latitude</label>
+          <input type="number" step="0.0001" id="e_lat" class="input-field">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Longitude</label>
+          <input type="number" step="0.0001" id="e_lng" class="input-field">
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Summary *</label>
+          <textarea id="e_summary" required rows="2" class="input-field resize-none"></textarea>
+        </div>
+        <div class="col-span-2">
+          <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Full Description</label>
+          <textarea id="e_description" rows="3" class="input-field resize-none"></textarea>
+        </div>
+        <div id="editMsg" class="col-span-2 hidden rounded-lg px-4 py-2.5 text-sm font-medium"></div>
+        <div class="col-span-2 flex gap-3 pt-2">
+          <button type="button" onclick="closeModal()" class="flex-1 rounded-lg border border-sand-300 py-2.5 text-sm font-semibold text-ink-500 hover:bg-sand-100 transition-colors">Cancel</button>
+          <button type="submit" id="editSaveBtn" class="flex-1 rounded-lg bg-ocean-600 py-2.5 text-sm font-semibold text-white hover:bg-ocean-700 transition-colors">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-20 border-b border-sand-200 bg-sand-50/95 backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-6">
+      <a href="index.html" class="font-display text-lg font-semibold tracking-tight text-ink flex items-center gap-2">
+        Explore<span class="text-ocean-600">Ambalangoda</span>
+        <span class="rounded-full bg-coral-100 px-2.5 py-0.5 text-xs font-bold text-coral-600 tracking-wide">ADMIN</span>
       </a>
-      <div class=""hidden items-center gap-1 md:flex"">
-        <a href=""index.html"" class=""rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-ink-500 hover:text-ink"">Home</a>
-        <a href=""attractions.html"" class=""rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out text-ink-500 hover:text-ink"">Places</a>
-        <a href=""admin.html"" class=""rounded-full px-3.5 py-2 text-sm font-medium transition-colors duration-150 ease-out bg-coral-100 text-coral-700"">Admin Dashboard</a>
+      <div class="hidden items-center gap-1 md:flex">
+        <a href="index.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink transition-colors">Home</a>
+        <a href="attractions.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink transition-colors">Places</a>
+        <a href="planner.html" class="rounded-full px-3.5 py-2 text-sm font-medium text-ink-500 hover:text-ink transition-colors">Day Planner</a>
+        <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium bg-coral-100 text-coral-600">Admin</a>
       </div>
     </nav>
   </header>
 
-  <main class=""flex-1 py-12 px-6"">
-    <div class=""mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-3 gap-8"">
-      
-      <!-- Add New Place Form -->
-      <div class=""lg:col-span-1"">
-        <div class=""bg-white rounded-2xl shadow-sm border border-sand-200 p-6"">
-          <h2 class=""font-display text-xl font-bold mb-6"">Add New Place</h2>
-          <form id=""addPlaceForm"" class=""space-y-4"">
-            <div>
-              <label class=""block text-sm font-medium text-ink-600 mb-1"">Place Name</label>
-              <input type=""text"" id=""p_name"" required class=""w-full rounded-md border border-sand-300 px-3 py-2"">
-            </div>
-            <div>
-              <label class=""block text-sm font-medium text-ink-600 mb-1"">Category</label>
-              <select id=""p_cat"" required class=""w-full rounded-md border border-sand-300 px-3 py-2"">
-                <option value=""Cultural Attraction"">Cultural Attraction</option>
-                <option value=""Religious Site"">Religious Site</option>
-                <option value=""Beach"">Beach</option>
-                <option value=""Heritage & Nature"">Heritage & Nature</option>
-                <option value=""Wildlife Attraction"">Wildlife</option>
-                <option value=""Cafe"">Cafe</option>
-                <option value=""Restaurant"">Restaurant</option>
-              </select>
-            </div>
-            <div>
-              <label class=""block text-sm font-medium text-ink-600 mb-1"">Distance (km)</label>
-              <input type=""number"" step=""0.1"" id=""p_dist"" required class=""w-full rounded-md border border-sand-300 px-3 py-2"">
-            </div>
-            <div>
-              <label class=""block text-sm font-medium text-ink-600 mb-1"">Summary</label>
-              <textarea id=""p_summary"" required class=""w-full rounded-md border border-sand-300 px-3 py-2""></textarea>
-            </div>
-            <button type=""submit"" class=""w-full bg-ocean-600 text-white font-bold py-2 rounded-md hover:bg-ocean-700"">Save Place</button>
-          </form>
-        </div>
+  <main class="flex-1 py-10 px-6">
+    <div class="mx-auto max-w-7xl">
+
+      <!-- Page heading -->
+      <div class="mb-8">
+        <h1 class="font-display text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <p class="mt-1 text-ink-500">Add, edit and delete tourist attractions connected to your MySQL database.</p>
       </div>
 
-      <!-- Places List -->
-      <div class=""lg:col-span-2"">
-        <div class=""bg-white rounded-2xl shadow-sm border border-sand-200 overflow-hidden"">
-          <div class=""p-6 border-b border-sand-200"">
-            <h2 class=""font-display text-xl font-bold"">Manage Existing Places</h2>
+      <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 items-start">
+
+        <!-- ── ADD FORM (Left column) ── -->
+        <div class="xl:col-span-1">
+          <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
+            <div class="bg-ocean-600 px-6 py-4">
+              <h2 class="font-display text-lg font-semibold text-white">Add New Place</h2>
+              <p class="text-ocean-100 text-xs mt-0.5">Fill in the details to add a new attraction.</p>
+            </div>
+            <form id="addPlaceForm" class="p-6 space-y-3">
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Place Name *</label>
+                <input type="text" id="p_name" required placeholder="e.g. Ariyapala Mask Museum" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Category *</label>
+                <select id="p_cat" required class="input-field">
+                  <option value="">Select category...</option>
+                  <option value="Cultural Attraction">Cultural Attraction</option>
+                  <option value="Religious Site">Religious Site</option>
+                  <option value="Beach">Beach</option>
+                  <option value="Heritage & Nature">Heritage &amp; Nature</option>
+                  <option value="Wildlife Attraction">Wildlife Attraction</option>
+                  <option value="Cafe">Cafe</option>
+                  <option value="Restaurant">Restaurant</option>
+                </select>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Distance (km) *</label>
+                  <input type="number" step="0.1" min="0" id="p_dist" required placeholder="2.5" class="input-field">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Duration (min)</label>
+                  <input type="number" min="5" id="p_duration" placeholder="60" class="input-field">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Opening Hours</label>
+                <input type="text" id="p_hours" placeholder="Daily 8:00 AM – 5:00 PM" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Entry Fee</label>
+                <input type="text" id="p_fee" placeholder="Free / LKR 500" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Contact</label>
+                <input type="text" id="p_contact" placeholder="+94 91 225 8373" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Short Summary *</label>
+                <textarea id="p_summary" required rows="2" placeholder="One-line description..." class="input-field resize-none"></textarea>
+              </div>
+              <div id="addMsg" class="hidden rounded-lg px-4 py-2.5 text-sm font-medium"></div>
+              <button type="submit" id="addBtn" class="w-full bg-ocean-600 text-white font-semibold py-2.5 rounded-lg hover:bg-ocean-700 transition-colors text-sm">
+                + Add Place
+              </button>
+            </form>
           </div>
-          <table class=""w-full text-left text-sm"">
-            <thead class=""bg-sand-50 text-ink-600 font-semibold"">
-              <tr>
-                <th class=""px-6 py-4"">Name</th>
-                <th class=""px-6 py-4"">Category</th>
-                <th class=""px-6 py-4"">Distance</th>
-                <th class=""px-6 py-4 text-right"">Actions</th>
-              </tr>
-            </thead>
-            <tbody id=""admin-places-list"" class=""divide-y divide-sand-100""></tbody>
-          </table>
         </div>
-      </div>
 
+        <!-- ── PLACES TABLE (Right 2 columns) ── -->
+        <div class="xl:col-span-2">
+          <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
+            <!-- Table header bar -->
+            <div class="px-6 py-4 border-b border-sand-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div>
+                <h2 class="font-display text-lg font-semibold">Manage Places</h2>
+                <p class="text-ink-500 text-xs mt-0.5" id="placeCount">Loading...</p>
+              </div>
+              <input type="text" id="tableSearch" placeholder="Search by name or category..." class="input-field sm:!w-56">
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-sand-50 border-b border-sand-200 text-xs text-ink-500 uppercase tracking-wide">
+                    <th class="px-5 py-3 text-left font-semibold">Name</th>
+                    <th class="px-5 py-3 text-left font-semibold">Category</th>
+                    <th class="px-5 py-3 text-left font-semibold">Distance</th>
+                    <th class="px-5 py-3 text-left font-semibold">Hours</th>
+                    <th class="px-5 py-3 text-right font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-places-list" class="divide-y divide-sand-100">
+                  <tr><td colspan="5" class="px-5 py-10 text-center text-ink-500">Loading places...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </main>
 
   <script>
-    async function loadAdminPlaces() {
-      const res = await fetch('api/get_places.php');
-      const places = await res.json();
+    let allPlaces = [];
+
+    // ── Toast ──────────────────────────────────────────────────
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show ' + type;
+      setTimeout(() => { t.className = 'toast ' + type; }, 3500);
+    }
+
+    // ── Category badge ─────────────────────────────────────────
+    const BADGE = {
+      'Cultural Attraction': 'bg-ochre-100 text-ochre-600',
+      'Religious Site':      'bg-ocean-100 text-ocean-700',
+      'Beach':               'bg-blue-100 text-blue-700',
+      'Heritage & Nature':   'bg-moss-100 text-moss-600',
+      'Wildlife Attraction': 'bg-moss-100 text-moss-600',
+      'Cafe':                'bg-coral-100 text-coral-600',
+      'Restaurant':          'bg-coral-100 text-coral-600',
+    };
+    function badge(label) {
+      const cls = BADGE[label] || 'bg-sand-100 text-ink-500';
+      return `<span class="inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${cls}">${label}</span>`;
+    }
+
+    // ── Render table ───────────────────────────────────────────
+    function renderTable(places) {
+      document.getElementById('placeCount').textContent = places.length + ' place' + (places.length !== 1 ? 's' : '') + ' in database';
       const tbody = document.getElementById('admin-places-list');
-      let html = '';
-      places.forEach(place => {
-        html += 
-          <tr class=""hover:bg-sand-50/50"">
-            <td class=""px-6 py-4 font-medium""> + place.name + </td>
-            <td class=""px-6 py-4""> + place.category_label + </td>
-            <td class=""px-6 py-4""> + place.distanceKm +  km</td>
-            <td class=""px-6 py-4 text-right"">
-              <button onclick=""deletePlace(' + place.id + ')"" class=""text-coral-600 hover:text-coral-800 font-medium"">Delete</button>
-            </td>
-          </tr>
-        ;
-      });
-      tbody.innerHTML = html;
+      if (!places.length) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-5 py-10 text-center text-ink-500">No places found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = places.map(p => `
+        <tr class="hover:bg-sand-50 transition-colors group">
+          <td class="px-5 py-3.5">
+            <div class="font-semibold text-ink leading-tight">${p.name}</div>
+            <div class="text-xs text-ink-500 mt-0.5">${p.summary ? p.summary.substring(0, 55) + '…' : ''}</div>
+          </td>
+          <td class="px-5 py-3.5">${badge(p.category_label)}</td>
+          <td class="px-5 py-3.5 text-ink-500 tabular-nums">${p.distanceKm} km</td>
+          <td class="px-5 py-3.5 text-ink-500 text-xs max-w-[140px] truncate">${p.openingHours || '—'}</td>
+          <td class="px-5 py-3.5 text-right">
+            <div class="flex justify-end gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
+              <button onclick="openEdit('${p.id}')" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-ocean-700 bg-ocean-100 hover:bg-ocean-600 hover:text-white transition-colors">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                Edit
+              </button>
+              <button onclick="deletePlace('${p.id}', '${p.name.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-coral-600 bg-coral-100 hover:bg-coral-600 hover:text-white transition-colors">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
     }
 
-    async function deletePlace(id) {
-      if(!confirm('Are you sure you want to delete this place?')) return;
-      await fetch('api/delete_place.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ id })
-      });
-      loadAdminPlaces();
+    // ── Load places from DB ────────────────────────────────────
+    async function loadPlaces() {
+      try {
+        const res = await fetch('api/get_places.php');
+        allPlaces = await res.json();
+        renderTable(allPlaces);
+      } catch (e) {
+        document.getElementById('admin-places-list').innerHTML =
+          '<tr><td colspan="5" class="px-5 py-10 text-center text-coral-600 font-medium">Failed to connect to database.</td></tr>';
+      }
     }
 
-    document.getElementById('addPlaceForm').addEventListener('submit', async (e) => {
+    // ── Search filter ──────────────────────────────────────────
+    document.getElementById('tableSearch').addEventListener('input', function () {
+      const q = this.value.toLowerCase();
+      renderTable(allPlaces.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.category_label.toLowerCase().includes(q) ||
+        (p.summary && p.summary.toLowerCase().includes(q))
+      ));
+    });
+
+    // ── ADD place ──────────────────────────────────────────────
+    document.getElementById('addPlaceForm').addEventListener('submit', async function (e) {
       e.preventDefault();
-      const name = document.getElementById('p_name').value;
-      const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      const btn = document.getElementById('addBtn');
+      const msg = document.getElementById('addMsg');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const name = document.getElementById('p_name').value.trim();
       const payload = {
-        id: id,
-        name: name,
+        id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+        name,
         category_id: document.getElementById('p_cat').value,
         distanceKm: parseFloat(document.getElementById('p_dist').value),
+        openingHours: document.getElementById('p_hours').value,
+        entryFee: document.getElementById('p_fee').value,
+        contact: document.getElementById('p_contact').value,
         summary: document.getElementById('p_summary').value,
-        imageUrl: 'e82c79b4-8b3c-4029-83c5-254bfbd49898.jpg' // Default placeholder image
+        visitDurationMin: parseInt(document.getElementById('p_duration').value) || 60,
+        description: '',
+        imageUrl: 'e82c79b4-8b3c-4029-83c5-254bfbd49898.jpg',
+        lat: 6.2306, lng: 80.0555, bestTime: ''
       };
-      
-      const res = await fetch('api/add_place.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-      if(res.ok) {
-        document.getElementById('addPlaceForm').reset();
-        loadAdminPlaces();
+
+      try {
+        const res = await fetch('api/add_place.php', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('"' + name + '" added successfully!', 'success');
+          this.reset();
+          loadPlaces();
+          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-moss-100 text-moss-600';
+          msg.textContent = '"' + name + '" added! It now appears on the public website.';
+        } else {
+          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
+          msg.textContent = 'Error: ' + (data.error || 'Place ID may already exist.');
+        }
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 5000);
+      } catch (err) {
+        showToast('Connection error: ' + err.message, 'error');
       }
+      btn.disabled = false; btn.textContent = '+ Add Place';
+    });
+
+    // ── EDIT modal ─────────────────────────────────────────────
+    function openEdit(id) {
+      const p = allPlaces.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('e_id').value = p.id;
+      document.getElementById('e_name').value = p.name;
+      document.getElementById('e_cat').value = p.category_id;
+      document.getElementById('e_dist').value = p.distanceKm;
+      document.getElementById('e_hours').value = p.openingHours || '';
+      document.getElementById('e_fee').value = p.entryFee || '';
+      document.getElementById('e_contact').value = p.contact || '';
+      document.getElementById('e_duration').value = p.visitDurationMin || 60;
+      document.getElementById('e_besttime').value = p.bestTime || '';
+      document.getElementById('e_lat').value = p.lat || '';
+      document.getElementById('e_lng').value = p.lng || '';
+      document.getElementById('e_summary').value = p.summary || '';
+      document.getElementById('e_description').value = p.description || '';
+      document.getElementById('editMsg').classList.add('hidden');
+      document.getElementById('editModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('editModal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal();
+    });
+
+    document.getElementById('editForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById('editSaveBtn');
+      const msg = document.getElementById('editMsg');
+      btn.disabled = true; btn.textContent = 'Saving...';
+
+      const payload = {
+        id: document.getElementById('e_id').value,
+        name: document.getElementById('e_name').value.trim(),
+        category_id: document.getElementById('e_cat').value,
+        distanceKm: parseFloat(document.getElementById('e_dist').value),
+        openingHours: document.getElementById('e_hours').value,
+        entryFee: document.getElementById('e_fee').value,
+        contact: document.getElementById('e_contact').value,
+        visitDurationMin: parseInt(document.getElementById('e_duration').value) || 60,
+        bestTime: document.getElementById('e_besttime').value,
+        lat: parseFloat(document.getElementById('e_lat').value) || 0,
+        lng: parseFloat(document.getElementById('e_lng').value) || 0,
+        summary: document.getElementById('e_summary').value,
+        description: document.getElementById('e_description').value,
+      };
+
+      try {
+        const res = await fetch('api/update_place.php', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('"' + payload.name + '" updated successfully!', 'success');
+          closeModal();
+          loadPlaces();
+        } else {
+          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
+          msg.textContent = 'Error: ' + (data.error || 'Could not save changes.');
+          msg.classList.remove('hidden');
+        }
+      } catch (err) {
+        showToast('Connection error: ' + err.message, 'error');
+      }
+      btn.disabled = false; btn.textContent = 'Save Changes';
+    });
+
+    // ── DELETE place ───────────────────────────────────────────
+    async function deletePlace(id, name) {
+      if (!confirm('Delete "' + name + '"?\n\nThis will remove it from the public website permanently.')) return;
+      try {
+        const res = await fetch('api/delete_place.php', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('"' + name + '" deleted.', 'success');
+          loadPlaces();
+        } else {
+          showToast('Failed to delete: ' + (data.error || 'Unknown error'), 'error');
+        }
+      } catch (e) {
+        showToast('Connection error.', 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadPlaces);
+  </script>
+</body>
+</html>
+
+  <style>
+    input, select, textarea { font-family: 'Inter', sans-serif; }
+    .input-field {
+      width: 100%; padding: 0.6rem 0.85rem; border-radius: 0.5rem;
+      border: 1.5px solid #E8DCC6; font-size: 0.875rem; color: #1B1A17;
+      background: #FBF8F2; outline: none; transition: border 0.15s;
+    }
+    .input-field:focus { border-color: #0E6E72; background: #fff; }
+    .btn-primary {
+      width: 100%; background: #0E6E72; color: #fff; font-weight: 600;
+      padding: 0.65rem 1rem; border-radius: 0.6rem; border: none; cursor: pointer;
+      font-size: 0.9rem; transition: background 0.15s;
+    }
+    .btn-primary:hover { background: #0A5458; }
+    .toast {
+      position: fixed; bottom: 1.5rem; right: 1.5rem; padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.12); z-index: 9999;
+      transition: opacity 0.3s; opacity: 0; pointer-events: none;
+    }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #E8EDDC; color: #54683B; }
+    .toast.error   { background: #F8E2DD; color: #A83525; }
+  </style>
+</head>
+<body class="bg-sand-50 text-ink min-h-screen flex flex-col">
+
+  <!-- Toast notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-20 border-b border-sand-200 bg-sand-50/95 backdrop-blur">
+    <nav class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-6 px-6">
+      <a href="index.html" class="font-display text-lg font-semibold tracking-tight text-ink flex items-center gap-2">
+        Explore<span class="text-ocean-600">Ambalangoda</span>
+        <span class="rounded-full bg-coral-100 px-2.5 py-0.5 text-xs font-bold text-coral-600 tracking-wide">ADMIN</span>
+      </a>
+      <div class="hidden items-center gap-1 md:flex">
+        <a href="index.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors text-ink-500 hover:text-ink">Home</a>
+        <a href="attractions.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors text-ink-500 hover:text-ink">Places</a>
+        <a href="planner.html" class="rounded-full px-3.5 py-2 text-sm font-medium transition-colors text-ink-500 hover:text-ink">Day Planner</a>
+        <a href="admin.html" class="rounded-full px-3.5 py-2 text-sm font-medium bg-coral-100 text-coral-600">Admin</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1 py-10 px-6">
+    <div class="mx-auto max-w-6xl">
+
+      <!-- Page Title -->
+      <div class="mb-10">
+        <h1 class="font-display text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+        <p class="mt-2 text-ink-500">Manage tourist attractions for the Explore Ambalangoda system.</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+
+        <!-- ── Left: Add New Place Form ── -->
+        <div class="lg:col-span-1">
+          <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
+            <div class="bg-ocean-600 px-6 py-4">
+              <h2 class="font-display text-lg font-semibold text-white">Add New Place</h2>
+              <p class="text-ocean-100 text-xs mt-0.5">Fill in the details to add a new attraction.</p>
+            </div>
+            <form id="addPlaceForm" class="p-6 space-y-4">
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Place Name *</label>
+                <input type="text" id="p_name" required placeholder="e.g. Ariyapala Mask Museum" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Category *</label>
+                <select id="p_cat" required class="input-field">
+                  <option value="">Select category...</option>
+                  <option value="Cultural Attraction">Cultural Attraction</option>
+                  <option value="Religious Site">Religious Site</option>
+                  <option value="Beach">Beach</option>
+                  <option value="Heritage & Nature">Heritage &amp; Nature</option>
+                  <option value="Wildlife Attraction">Wildlife Attraction</option>
+                  <option value="Cafe">Cafe</option>
+                  <option value="Restaurant">Restaurant</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Distance from Town (km) *</label>
+                <input type="number" step="0.1" min="0" id="p_dist" required placeholder="e.g. 2.5" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Opening Hours</label>
+                <input type="text" id="p_hours" placeholder="e.g. Daily 8:00 AM – 5:00 PM" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Entry Fee</label>
+                <input type="text" id="p_fee" placeholder="e.g. Free / LKR 500" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Contact</label>
+                <input type="text" id="p_contact" placeholder="e.g. +94 91 225 8373" class="input-field">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-ink-500 uppercase tracking-wide mb-1.5">Short Summary *</label>
+                <textarea id="p_summary" required rows="3" placeholder="One-line description of the place..." class="input-field resize-none"></textarea>
+              </div>
+              <div id="formMsg" class="hidden rounded-lg px-4 py-2.5 text-sm font-medium"></div>
+              <button type="submit" class="btn-primary">
+                + Add Place
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- ── Right: Places Table ── -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-2xl border border-sand-200 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 border-b border-sand-200 flex items-center justify-between">
+              <div>
+                <h2 class="font-display text-lg font-semibold">Manage Places</h2>
+                <p class="text-ink-500 text-xs mt-0.5" id="placeCount">Loading...</p>
+              </div>
+              <input type="text" id="tableSearch" placeholder="Search places..." class="input-field !w-48">
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-sand-50 text-ink-500 text-xs uppercase tracking-wide">
+                    <th class="px-6 py-3 text-left font-semibold">Name</th>
+                    <th class="px-6 py-3 text-left font-semibold">Category</th>
+                    <th class="px-6 py-3 text-left font-semibold">Distance</th>
+                    <th class="px-6 py-3 text-right font-semibold">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-places-list" class="divide-y divide-sand-100">
+                  <tr><td colspan="4" class="px-6 py-10 text-center text-ink-500">Loading places...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    let allPlaces = [];
+
+    function showToast(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show ' + type;
+      setTimeout(() => { t.className = 'toast ' + type; }, 3000);
+    }
+
+    function getCategoryBadge(label) {
+      const map = {
+        'Cultural Attraction': 'bg-ochre-100 text-ochre-600',
+        'Religious Site':      'bg-ocean-100 text-ocean-700',
+        'Beach':               'bg-sky-100 text-sky-700',
+        'Heritage & Nature':   'bg-moss-100 text-moss-600',
+        'Wildlife Attraction': 'bg-moss-100 text-moss-600',
+        'Cafe':                'bg-coral-100 text-coral-600',
+        'Restaurant':          'bg-coral-100 text-coral-600',
+      };
+      const cls = map[label] || 'bg-sand-100 text-ink-500';
+      return `<span class="rounded-full px-2.5 py-0.5 text-xs font-semibold ${cls}">${label}</span>`;
+    }
+
+    function renderTable(places) {
+      const tbody = document.getElementById('admin-places-list');
+      document.getElementById('placeCount').textContent = places.length + ' places in database';
+      if (places.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-10 text-center text-ink-500">No places found.</td></tr>';
+        return;
+      }
+      tbody.innerHTML = places.map(p => `
+        <tr class="hover:bg-sand-50 transition-colors">
+          <td class="px-6 py-4">
+            <div class="font-semibold text-ink">${p.name}</div>
+          </td>
+          <td class="px-6 py-4">${getCategoryBadge(p.category_label)}</td>
+          <td class="px-6 py-4 text-ink-500">${p.distanceKm} km</td>
+          <td class="px-6 py-4 text-right">
+            <button onclick="deletePlace('${p.id}', '${p.name.replace(/'/g,"\\'")}')
+" class="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-semibold text-coral-600 bg-coral-100 hover:bg-coral-600 hover:text-white transition-colors">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+              Delete
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function loadAdminPlaces() {
+      try {
+        const res = await fetch('api/get_places.php');
+        allPlaces = await res.json();
+        renderTable(allPlaces);
+      } catch (e) {
+        document.getElementById('admin-places-list').innerHTML =
+          '<tr><td colspan="4" class="px-6 py-10 text-center text-coral-600">Failed to load places.</td></tr>';
+      }
+    }
+
+    async function deletePlace(id, name) {
+      if (!confirm('Delete "' + name + '"? This cannot be undone.')) return;
+      try {
+        const res = await fetch('api/delete_place.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('"' + name + '" deleted successfully.', 'success');
+          loadAdminPlaces();
+        } else {
+          showToast('Failed to delete place.', 'error');
+        }
+      } catch (e) {
+        showToast('Error: ' + e.message, 'error');
+      }
+    }
+
+    document.getElementById('tableSearch').addEventListener('input', function () {
+      const q = this.value.toLowerCase();
+      renderTable(allPlaces.filter(p =>
+        p.name.toLowerCase().includes(q) || p.category_label.toLowerCase().includes(q)
+      ));
+    });
+
+    document.getElementById('addPlaceForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type=submit]');
+      const msg = document.getElementById('formMsg');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      const name = document.getElementById('p_name').value.trim();
+      const payload = {
+        id: name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+        name,
+        category_id: document.getElementById('p_cat').value,
+        distanceKm: parseFloat(document.getElementById('p_dist').value),
+        openingHours: document.getElementById('p_hours').value,
+        entryFee: document.getElementById('p_fee').value,
+        contact: document.getElementById('p_contact').value,
+        summary: document.getElementById('p_summary').value,
+        imageUrl: 'e82c79b4-8b3c-4029-83c5-254bfbd49898.jpg',
+        visitDurationMin: 45
+      };
+
+      try {
+        const res = await fetch('api/add_place.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-moss-100 text-moss-600';
+          msg.textContent = '"' + name + '" added successfully!';
+          showToast('"' + name + '" added successfully!', 'success');
+          this.reset();
+          loadAdminPlaces();
+        } else {
+          msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
+          msg.textContent = 'Error: ' + (data.error || 'Could not save. Place ID may already exist.');
+        }
+        msg.classList.remove('hidden');
+        setTimeout(() => msg.classList.add('hidden'), 4000);
+      } catch (err) {
+        msg.className = 'rounded-lg px-4 py-2.5 text-sm font-medium bg-coral-100 text-coral-600';
+        msg.textContent = 'Connection error: ' + err.message;
+        msg.classList.remove('hidden');
+      }
+
+      btn.disabled = false;
+      btn.textContent = '+ Add Place';
     });
 
     document.addEventListener('DOMContentLoaded', loadAdminPlaces);

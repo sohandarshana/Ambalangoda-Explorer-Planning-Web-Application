@@ -1,37 +1,37 @@
 <?php
 require_once 'config.php';
-
 header('Content-Type: application/json');
 
-\ = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset(\['id'], \['name'], \['category_id'], \['distanceKm'])) {
+if (!isset($data['id'], $data['name'], $data['category_id'], $data['distanceKm'])) {
     echo json_encode(['success' => false, 'error' => 'Missing required fields']);
     exit;
 }
 
 try {
-    \ = \->prepare('INSERT INTO places (id, name, category_id, distanceKm, summary, description, imageUrl, openingHours, entryFee, contact, visitDurationMin, lat, lng, bestTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
-    
-    \->execute([
-        \['id'], 
-        \['name'], 
-        \['category_id'], 
-        \['distanceKm'],
-        \['summary'] ?? '',
-        \['description'] ?? '',
-        \['imageUrl'] ?? '',
-        \['openingHours'] ?? '',
-        \['entryFee'] ?? '',
-        \['contact'] ?? '',
-        \['visitDurationMin'] ?? 60,
-        \['lat'] ?? 0.0,
-        \['lng'] ?? 0.0,
-        \['bestTime'] ?? ''
+    $stmt = $pdo->prepare('INSERT INTO places (id, name, category_id, distanceKm, summary, description, imageUrl, openingHours, entryFee, contact, visitDurationMin, lat, lng, bestTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+
+    $stmt->execute([
+        $data['id'],
+        $data['name'],
+        $data['category_id'],
+        $data['distanceKm'],
+        $data['summary'] ?? '',
+        $data['description'] ?? '',
+        $data['imageUrl'] ?? '',
+        $data['openingHours'] ?? '',
+        $data['entryFee'] ?? '',
+        $data['contact'] ?? '',
+        $data['visitDurationMin'] ?? 60,
+        $data['lat'] ?? 0.0,
+        $data['lng'] ?? 0.0,
+        $data['bestTime'] ?? ''
     ]);
-    
+
     echo json_encode(['success' => true]);
-} catch (PDOException \) {
-    echo json_encode(['success' => false, 'error' => \->getMessage()]);
+} catch (PDOException $e) {
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
 ?>
+
