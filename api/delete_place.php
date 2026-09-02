@@ -1,22 +1,22 @@
 <?php
 require_once 'config.php';
-
 header('Content-Type: application/json');
 
-\ = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'), true);
 
-if (!isset(\['id'])) {
+if (!isset($data['id'])) {
     echo json_encode(['success' => false, 'error' => 'No ID provided']);
     exit;
 }
 
-\ = \['id'];
+$id = $data['id'];
 
 try {
-    \ = \->prepare('DELETE FROM places WHERE id = ?');
-    \->execute([\]);
+    $stmt = $pdo->prepare('DELETE FROM places WHERE id = ?');
+    $stmt->execute([$id]);
     echo json_encode(['success' => true]);
-} catch (PDOException \) {
-    echo json_encode(['success' => false, 'error' => \->getMessage()]);
+} catch (PDOException $e) {
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
 }
 ?>
+
