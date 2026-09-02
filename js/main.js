@@ -303,61 +303,121 @@ window.removePlannerItem = function(id) {
 let map = null;
 let markers = [];
 let routeLine = null;
+let infoWindow = null;
+
+// Called by Google Maps script once loaded
+window.initMapGoogle = function() {
+  window.googleMapsLoaded = true;
+  if (document.getElementById('map')) {
+    initMap(getItinerary());
+  }
+}
 
 function initMap(places) {
   const mapContainer = document.getElementById('map');
   if (!mapContainer) return;
   
+  if (!window.googleMapsLoaded) return; // Wait for Google API
+  
   if (places.length === 0) {
-    if (map) { map.remove(); map = null; }
-    mapContainer.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-ink-500 bg-sand-100">Add places to see them on the map</div>';
+    mapContainer.innerHTML = '<div class="absolute inset-0 flex items-center justify-center text-ink-500 bg-sand-100 z-10">Add places to see them on the map</div>';
+    if (map) {
+      // clear map visually
+      mapContainer.style.visibility = 'hidden';
+    }
     return;
-  }
-  
-  if (!map) {
+  } else {
     mapContainer.innerHTML = '';
-    map = L.map('map').setView([6.233, 80.054], 13);
-    const isDark = document.documentElement.classList.contains('dark');
-    L.tileLayer(isDark ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap contributors &copy; CARTO', subdomains: 'abcd', maxZoom: 19
-    }).addTo(map);
+    mapContainer.style.visibility = 'visible';
   }
   
-  markers.forEach(m => map.removeLayer(m));
+  // Initialize map if not exists
+  if (!map) {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    // Custom dark theme for Google Maps
+    const darkStyles = [
+      { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+      { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
+      { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
+      { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
+      { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
+      { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] }
+    ];
+    
+    map = new google.maps.Map(mapContainer, {
+      center: { lat: 6.233, lng: 80.054 },
+      zoom: 13,
+      styles: isDark ? darkStyles : [],
+      disableDefaultUI: true,
+      zoomControl: true
+    });
+    
+    infoWindow = new google.maps.InfoWindow();
+  }
+  
+  // Clear existing markers and line
+  markers.forEach(m => m.setMap(null));
   markers = [];
-  if (routeLine) map.removeLayer(routeLine);
+  if (routeLine) routeLine.setMap(null);
   
   const latLngs = [];
+  
+  // Add new markers
   places.forEach((place, index) => {
     if (place.lat && place.lng) {
       const lat = parseFloat(place.lat);
       const lng = parseFloat(place.lng);
-      latLngs.push([lat, lng]);
+      const position = { lat, lng };
+      latLngs.push(position);
       
-      const customIcon = L.divIcon({
-        className: 'custom-div-icon',
-        html: '<div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm">' + (index + 1) + '</div>',
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+      const marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        label: {
+            text: (index + 1).toString(),
+            color: 'white',
+            fontWeight: 'bold'
+        },
+        title: place.name
       });
       
-      const marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
-      marker.bindPopup('<b>' + place.name + '</b><br>' + place.category_label);
+      marker.addListener('click', () => {
+        infoWindow.setContent(<b> + place.name + </b><br> + place.category_label);
+        infoWindow.open(map, marker);
+      });
+      
       markers.push(marker);
     }
   });
   
+  // Draw route line
   if (latLngs.length > 1) {
-    routeLine = L.polyline(latLngs, {color: '#D08A22', weight: 4, dashArray: '5, 10'}).addTo(map);
+    routeLine = new google.maps.Polyline({
+      path: latLngs,
+      geodesic: true,
+      strokeColor: '#D08A22',
+      strokeOpacity: 1.0,
+      strokeWeight: 4
+    });
+    routeLine.setMap(map);
   }
   
+  // Fit bounds to show all markers
   if (latLngs.length > 0) {
-    map.fitBounds(L.latLngBounds(latLngs), {padding: [50, 50]});
+    const bounds = new google.maps.LatLngBounds();
+    latLngs.forEach(ll => bounds.extend(ll));
+    map.fitBounds(bounds);
   }
 }
 
 window.focusMap = function(lat, lng) {
   if (map && lat && lng) {
-    map.setView([parseFloat(lat), parseFloat(lng)], 16);
+    map.setCenter({ lat: parseFloat(lat), lng: parseFloat(lng) });
+    map.setZoom(16);
   }
 }
