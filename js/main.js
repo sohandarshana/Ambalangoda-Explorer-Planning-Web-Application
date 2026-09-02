@@ -269,7 +269,7 @@ function renderPlanner() {
   let html = '';
   itinerary.forEach((place, index) => {
     html += `
-      <div onclick="focusMap(`${place.lat}`, `${place.lng}`)" class="group relative flex items-center cursor-pointer gap-4 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
+      <div onclick="focusMap('${place.lat}', '${place.lng}')" class="group relative flex items-center cursor-pointer gap-4 rounded-2xl border border-sand-200 bg-white p-4 shadow-sm transition-all hover:shadow-md">
         <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sand-100 text-sm font-bold text-ink-500">
           ${index + 1}
         </div>
@@ -336,13 +336,13 @@ function initMap(places) {
       
       const customIcon = L.divIcon({
         className: 'custom-div-icon',
-        html: <div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm"> + (index + 1) + </div>,
+        html: '<div class="w-8 h-8 flex items-center justify-center rounded-full bg-ochre-600 text-sand-50 font-bold border-2 border-white shadow-md text-sm">' + (index + 1) + '</div>',
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       });
       
       const marker = L.marker([lat, lng], {icon: customIcon}).addTo(map);
-      marker.bindPopup(<b> + place.name + </b><br> + place.category_label);
+      marker.bindPopup('<b>' + place.name + '</b><br>' + place.category_label);
       markers.push(marker);
     }
   });
