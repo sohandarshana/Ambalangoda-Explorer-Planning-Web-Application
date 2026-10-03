@@ -3,7 +3,7 @@ session_start();
 // api/config.php
 
 $host = '127.0.0.1';
-$port = '3307';
+$port = '3306';
 $db   = 'ambalangoda_trip';
 $user = 'root'; // Change as needed
 $pass = ''; // XAMPP default has no password
