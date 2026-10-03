@@ -1,0 +1,9 @@
+﻿# Dependencies
+node_modules/
+# Build cache
+.vite/
+# IDE files
+.idea/
+# OS files
+.DS_Store
+Thumbs.db
